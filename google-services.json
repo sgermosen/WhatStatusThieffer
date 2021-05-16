@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "671639808129",
+    "firebase_url": "https://wpstatusaver.firebaseio.com",
+    "project_id": "wpstatusaver",
+    "storage_bucket": "wpstatusaver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671639808129:android:533b54c0d3772630edc580",
+        "android_client_info": {
+          "package_name": "com.xamarindo.wpstatusaver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671639808129-fop2665qrf9j3c5adb74e122fic18q58.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgZeI36dynrIS3SGD0wzk5aFHkvaNzPbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671639808129-fop2665qrf9j3c5adb74e122fic18q58.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
