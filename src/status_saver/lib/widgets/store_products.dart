@@ -25,7 +25,8 @@ class _StoreProductsState extends State<StoreProducts> {
     super.initState();
 
     // Check google play services
-    InAppPurchaseConnection.instance.isAvailable().then((result) {
+    // InAppPurchaseConnection.instance
+    InAppPurchase.instance.isAvailable().then((result) {
       if (mounted)
         setState(() {
           _storeIsAvailable =
@@ -34,14 +35,15 @@ class _StoreProductsState extends State<StoreProducts> {
     });
 
     // Get product subscriptions from google play store / apple store
-    InAppPurchaseConnection.instance
+    // InAppPurchaseConnection.instance
+    InAppPurchase.instance
         .queryProductDetails(widget.subscriptionIDs.toSet())
         .then((ProductDetailsResponse response) {
       /// Update UI
       if (mounted)
         setState(() {
           _products = response.productDetails
-              .where((item) => item.skuDetail.type == SkuType.subs)
+              // .where((item) => item.skuDetail.type == skuty.subs)
               .toList();
           // Check result
           if (_products.isNotEmpty) {
@@ -105,7 +107,7 @@ class _StoreProductsState extends State<StoreProducts> {
                   );
 
                   /// Subscribe
-                  InAppPurchaseConnection.instance
+                  InAppPurchase.instance
                       .buyNonConsumable(purchaseParam: pParam);
                 }),
           ),
@@ -120,8 +122,11 @@ class _StoreProductsState extends State<StoreProducts> {
             children: <Widget>[
               Icon(Icons.search,
                   size: 80, color: Theme.of(context).primaryColor),
-              Text(_i18n.translate('no_subscriptions_found_please_try_again_later'),
-                  style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
+              Text(
+                  _i18n.translate(
+                      'no_subscriptions_found_please_try_again_later'),
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center),
             ],
           ),
         ),
@@ -137,7 +142,8 @@ class _StoreProductsState extends State<StoreProducts> {
           Icon(Icons.error_outline,
               size: 80, color: Theme.of(context).primaryColor),
           Text(
-              _i18n.translate('sorry_subscriptions_are_not_available_now_please_try_again_later'),
+              _i18n.translate(
+                  'sorry_subscriptions_are_not_available_now_please_try_again_later'),
               style: TextStyle(fontSize: 18.0),
               textAlign: TextAlign.center),
         ],

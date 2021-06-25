@@ -24,7 +24,7 @@ class NotificationManager {
         onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
 
     var initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: _onSelectNotification);
@@ -37,14 +37,15 @@ class NotificationManager {
         APP_PACKAGE_NAME,
         '$APP_NAME ' + _i18n.translate('Reminder'),
         _i18n.translate('reminder_to_download_WhatsApp_status'),
-        importance: Importance.Max,
-        priority: Priority.High,
+        importance: Importance.max,
+        priority: Priority.high,
         color: Colors.teal,
         playSound: true,
         ticker: '$APP_NAME ' + _i18n.translate('Reminder'));
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
 
     return platformChannelSpecifics;
   }
@@ -57,7 +58,7 @@ class NotificationManager {
         0,
         APP_NAME,
         i18n.translate('reminder_to_download_WhatsApp_status'),
-        RepeatInterval.Daily,
+        RepeatInterval.daily,
         _getPlatformChannelSpecfics());
     print('showPeriodicallyNotification() -> Scheduled');
   }

@@ -177,56 +177,57 @@ class SavedStatusTabState extends State<SavedStatusTab> {
                       showDialog(
                           context: context,
                           barrierDismissible: false,
-                          child: AlertDialog(
-                            title: Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.red,
-                                  child:
-                                      Icon(Icons.delete, color: Colors.white),
+                          builder: (_) => AlertDialog(
+                                title: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.red,
+                                      child: Icon(Icons.delete,
+                                          color: Colors.white),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Expanded(
+                                        child: Text(_i18n.translate(
+                                            'delete_selected_statuses')))
+                                  ],
                                 ),
-                                SizedBox(width: 5),
-                                Expanded(
-                                    child: Text(_i18n
-                                        .translate('delete_selected_statuses')))
-                              ],
-                            ),
-                            actions: [
-                              // Cancel button
-                              FlatButton(
-                                  textColor: Colors.grey,
-                                  child: Text(_i18n.translate('CANCEL')),
-                                  onPressed: () => Navigator.of(context).pop()),
-                              // Delete button
-                              FlatButton(
-                                textColor: Colors.red,
-                                child: Text(_i18n.translate('DELETE')),
-                                onPressed: () async {
-                                  /// Delete bulk status
-                                  ///
-                                  // Loop selected status
-                                  for (String status
-                                      in AppModel().selectedStatusList) {
-                                    print('Selected status: $status');
+                                actions: [
+                                  // Cancel button
+                                  FlatButton(
+                                      textColor: Colors.grey,
+                                      child: Text(_i18n.translate('CANCEL')),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop()),
+                                  // Delete button
+                                  FlatButton(
+                                    textColor: Colors.red,
+                                    child: Text(_i18n.translate('DELETE')),
+                                    onPressed: () async {
+                                      /// Delete bulk status
+                                      ///
+                                      // Loop selected status
+                                      for (String status
+                                          in AppModel().selectedStatusList) {
+                                        print('Selected status: $status');
 
-                                    //Remove status from the list
-                                    _savedStatusList.remove(status);
+                                        //Remove status from the list
+                                        _savedStatusList.remove(status);
 
-                                    /// Delete status one by one
-                                    await File(status).delete();
-                                  }
-                                  // Empty list
-                                  AppModel().clearSeletedStatuses();
+                                        /// Delete status one by one
+                                        await File(status).delete();
+                                      }
+                                      // Empty list
+                                      AppModel().clearSeletedStatuses();
 
-                                  /// Update UI
-                                  //setState(() {});
+                                      /// Update UI
+                                      //setState(() {});
 
-                                  // Close dialog
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          ));
+                                      // Close dialog
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ));
                     },
                   ),
                 ]),
@@ -240,40 +241,40 @@ class SavedStatusTabState extends State<SavedStatusTab> {
     showDialog(
         context: context,
         barrierDismissible: false,
-        child: AlertDialog(
-          title: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.red,
-                child: Icon(Icons.delete, color: Colors.white),
+        builder: (_) => AlertDialog(
+              title: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.red,
+                    child: Icon(Icons.delete, color: Colors.white),
+                  ),
+                  SizedBox(width: 5),
+                  Expanded(child: Text(_i18n.translate('delete_this_status')))
+                ],
               ),
-              SizedBox(width: 5),
-              Expanded(child: Text(_i18n.translate('delete_this_status')))
-            ],
-          ),
-          actions: [
-            // Cancel button
-            FlatButton(
-                textColor: Colors.grey,
-                child: Text(_i18n.translate('CANCEL')),
-                onPressed: () => Navigator.of(context).pop()),
-            // Delete button
-            FlatButton(
-              textColor: Colors.red,
-              child: Text(_i18n.translate('DELETE')),
-              onPressed: () async {
-                /// Delete status one by one
-                await File(path).delete();
+              actions: [
+                // Cancel button
+                FlatButton(
+                    textColor: Colors.grey,
+                    child: Text(_i18n.translate('CANCEL')),
+                    onPressed: () => Navigator.of(context).pop()),
+                // Delete button
+                FlatButton(
+                  textColor: Colors.red,
+                  child: Text(_i18n.translate('DELETE')),
+                  onPressed: () async {
+                    /// Delete status one by one
+                    await File(path).delete();
 
-                /// Update UI
-                setState(() {
-                  _savedStatusList.remove(path);
-                });
-                // Close dialog
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ));
+                    /// Update UI
+                    setState(() {
+                      _savedStatusList.remove(path);
+                    });
+                    // Close dialog
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ));
   }
 }

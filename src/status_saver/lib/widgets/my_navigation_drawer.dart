@@ -31,32 +31,32 @@ class MyNavigationDrawer extends StatelessWidget {
         _drawerHeader(context),
 
         /// *** New features *** ///
-        ListTile(
-          leading: Icon(Icons.block),
-          title: Text(
-            i18n.translate('remove_ads'),
-          ),
-          trailing: Icon(Icons.arrow_forward),
-          onTap: () {
-            // Go to Remove Ads screen
-            Navigator.push(context,
-                new MaterialPageRoute(builder: (context) => RemoveAdsScreen()));
-          },
-        ),
+        // ListTile(
+        //   leading: Icon(Icons.block),
+        //   title: Text(
+        //     i18n.translate('remove_ads'),
+        //   ),
+        //   trailing: Icon(Icons.arrow_forward),
+        //   onTap: () {
+        //     // Go to Remove Ads screen
+        //     Navigator.push(context,
+        //         new MaterialPageRoute(builder: (context) => RemoveAdsScreen()));
+        //   },
+        // ),
 
-        ListTile(
-          leading: Icon(Icons.copyright),
-          title:
-              Text(i18n.translate('remove_watermark'), style: _menutextcolor),
-          trailing: Icon(Icons.arrow_forward),
-          onTap: () {
-            // Go to Remove Watermark screen
-            Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) => RemoveWatermarkScreen()));
-          },
-        ),
+        // ListTile(
+        //   leading: Icon(Icons.copyright),
+        //   title:
+        //       Text(i18n.translate('remove_watermark'), style: _menutextcolor),
+        //   trailing: Icon(Icons.arrow_forward),
+        //   onTap: () {
+        //     // Go to Remove Watermark screen
+        //     Navigator.push(
+        //         context,
+        //         new MaterialPageRoute(
+        //             builder: (context) => RemoveWatermarkScreen()));
+        //   },
+        // ),
 
         ListTile(
           leading: Icon(Icons.settings),

@@ -305,16 +305,16 @@ class App {
     showDialog(
         context: context,
         barrierDismissible: false,
-        child: AlertDialog(
-            content: Row(
-          children: <Widget>[
-            CircularProgressIndicator(),
-            SizedBox(width: 15),
-            Text(
-                "${i18n.translate('processing')}\n${i18n.translate('please_wait')}",
-                style: TextStyle(fontSize: 18))
-          ],
-        )));
+        builder: (_) => AlertDialog(
+                content: Row(
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(width: 15),
+                Text(
+                    "${i18n.translate('processing')}\n${i18n.translate('please_wait')}",
+                    style: TextStyle(fontSize: 18))
+              ],
+            )));
   }
 
   /// Dialog to show information
@@ -326,27 +326,29 @@ class App {
     showDialog(
         context: context,
         barrierDismissible: false,
-        child: AlertDialog(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(Icons.check_circle, size: 65, color: color ?? Colors.teal),
-              SizedBox(width: 15),
-              Text(message,
-                  style: TextStyle(fontSize: 18), textAlign: TextAlign.center)
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              color: Colors.teal,
-              textColor: Colors.white,
-              child: Text('OK'),
-              onPressed: () => Navigator.of(context).pop(),
-            )
-          ],
-        ));
+        builder: (_) => AlertDialog(
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(Icons.check_circle,
+                      size: 65, color: color ?? Colors.teal),
+                  SizedBox(width: 15),
+                  Text(message,
+                      style: TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center)
+                ],
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  color: Colors.teal,
+                  textColor: Colors.white,
+                  child: Text('OK'),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              ],
+            ));
   }
 }

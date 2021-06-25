@@ -20,7 +20,7 @@ const List<Locale> SUPPORTED_LOCALES = [
 
 /// User Reward Minutes
 ///
-const int REWARDED_MINUTES = 1440;
+const int REWARDED_MINUTES = 120;
 
 /// REMOVE ADS - GOOGLE PLAY SUBSCRIPTIONS IDS
 ///

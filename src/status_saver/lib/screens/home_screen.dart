@@ -33,38 +33,41 @@ class _HomeScreenState extends State<HomeScreen> {
     // Local variables
     bool _showAds = true;
 
-    // Query past subscriptions
-    InAppPurchaseConnection.instance
-        .queryPastPurchases()
-        .then((QueryPurchaseDetailsResponse pastPurchases) {
-      // Chek past purchases result
-      if (pastPurchases.pastPurchases.isNotEmpty) {
-        for (var purchase in pastPurchases.pastPurchases) {
-          debugPrint('User Active Subs sku: ${purchase.productID}');
+    //   // Query past subscriptions
+    //   InAppPurchase.instance
+    // //  InAppPurchaseConnection.instance
+    //       ///.queryPastPurchases()
+    //       //.then((QueryPurchaseDetailsResponse pastPurchases) {
+    //     // Chek past purchases result
+    //     if (pastPurchases.pastPurchases.isNotEmpty) {
+    //       for (var purchase in pastPurchases.pastPurchases) {
+    //         debugPrint('User Active Subs sku: ${purchase.productID}');
 
-          /// Check Subscription ID to Update App UI
-          if (purchase.productID.startsWith('ads')) {
-            // Disable showing Ads
-            AppModel().disableShowAds();
-            _showAds = false;
-          } else if (purchase.productID.startsWith('watermark')) {
-            // Disable watermarking status
-            AppModel().disableWatermark();
-          }
-        }
-      }
-      // else {
-      //  debugPrint('No Active subscriptions for current User');
-      // }
-    });
+    //         /// Check Subscription ID to Update App UI
+    //         if (purchase.productID.startsWith('ads')) {
+    //           // Disable showing Ads
+    //           AppModel().disableShowAds();
+    //           _showAds = false;
+    //         } else if (purchase.productID.startsWith('watermark')) {
+    //           // Disable watermarking status
+    //           AppModel().disableWatermark();
+    //         }
+    //       }
+    //     }
+    //     // else {
+    //     //  debugPrint('No Active subscriptions for current User');
+    //     // }
+    //   });
     return _showAds;
   }
 
   /// Handle in-app purchases Upates
   void _handlePurchaseUpdates() {
     // listen purchase updates
-    _inAppPurchaseStream = InAppPurchaseConnection
-        .instance.purchaseUpdatedStream
+
+    _inAppPurchaseStream = InAppPurchase.instance.purchaseStream
+        //InAppPurchaseConnection
+        // .instance.purchaseUpdatedStream
         .listen((purchases) async {
       // Loop incoming purchases
       for (var purchase in purchases) {
@@ -90,7 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
             if (purchase.pendingCompletePurchase) {
               /// Complete pending purchase
-              InAppPurchaseConnection.instance.completePurchase(purchase);
+              InAppPurchase.instance.completePurchase(purchase);
+              //  InAppPurchaseConnection.instance.completePurchase(purchase);
               debugPrint('Success pending purchase completed!');
             }
             break;

@@ -1,18 +1,23 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
+// import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:status_saver/app/app.dart';
 import 'package:status_saver/app/app_localizations.dart';
 import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/app_model.dart';
 import 'package:status_saver/screens/start_screen.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 void main() async {
   // For play billing library 2.0 on Android, it is mandatory to call
   // [enablePendingPurchases](https://developer.android.com/reference/com/android/billingclient/api/BillingClient.Builder.html#enablependingpurchases)
   // as part of initializing the app.
-  InAppPurchaseConnection.enablePendingPurchases();
+  // InAppPurchaseConnection.enablePendingPurchases();
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
+  }
   runApp(MyApp());
 }
 
@@ -24,7 +29,6 @@ class MyApp extends StatefulWidget {
 // Global navigator
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-
 class _MyAppState extends State<MyApp> {
   // Variables
   final App _app = new App();
@@ -34,11 +38,10 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     // Get app theme
     _app.getDarkTheme().then((value) {
-        print('isDarkThemeEnabled: $value');
-        // Update UI
-        AppModel().updateAppTheme(value);
+      print('isDarkThemeEnabled: $value');
+      // Update UI
+      AppModel().updateAppTheme(value);
     });
-  
   }
 
   @override
