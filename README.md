@@ -6,8 +6,8 @@
 ## Bulk delete is not really deleting well: 
 On saved status if you press for 2 seconds, the bulk delete its enabled, but, apparently it work, it remove it from the screen, but, when you close the app, the deleted status are still there.
 
-## When a video is saved or shared it create a picture for the watermark, but its dont be deleted: 
-This problem can be solved only removing the watermark signal, but, will be great solve the correct deletion of this issue.
+## When a video is saved or shared it creates a picture for the watermark, but it doesn't be deleted: 
+This problem can be solved only by removing the watermark signal, but, will be great to solve the correct deletion of this issue.
 
 ## Notifications are not working
 There's a configuration of a reminder that is supposed to be executed daily, on production is not working but on debug mode yes
