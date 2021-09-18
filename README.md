@@ -12,4 +12,4 @@ There's a configuration of a reminder that is supposed to be executed daily, on 
 # Feature wanted
 
 ## Floating button to download
-I want a floating button than if I am seen the status from my friend I hit it and immediately start the download of that status
+I want a floating button than if I am seen the status from my friend I hit it and immediately start the download of that status.
