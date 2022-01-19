@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "848225296825",
-    "firebase_url": "https://wp-pic-and-video-status-saver.firebaseio.com",
-    "project_id": "wp-pic-and-video-status-saver",
-    "storage_bucket": "wp-pic-and-video-status-saver.appspot.com"
+    "project_number": "xxxxx",
+    "project_id": "xxxxxxx",
+    "storage_bucket": "xxxxx.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:848225296825:android:85eb6d63a5a5adfce4d668",
+        "mobilesdk_app_id": "1:xxxx:android:xxxx",
         "android_client_info": {
           "package_name": "com.xamarindo.wpstatusaver"
         }
       },
       "oauth_client": [
         {
-          "client_id": "848225296825-1qmtb4uqnbe6huaepul7e951t8r5k7vr.apps.googleusercontent.com",
+          "client_id": "xxx-xxx.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAI2EhOqr7efuhA6HHKwGbZicGXWSLcgqo"
+          "current_key": "xxxxx"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "848225296825-1qmtb4uqnbe6huaepul7e951t8r5k7vr.apps.googleusercontent.com",
+              "client_id": "xxx-xxx.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

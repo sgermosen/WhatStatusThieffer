@@ -2,10 +2,10 @@ import 'dart:ui';
 
 /// APP SETTINGS CONSTANTS
 ///
-const String APP_NAME = "WhatStatus Thieffer";
+const String APP_NAME = "Wp Status Taker";
 const String APP_PACKAGE_NAME = "com.xamarindo.wpstatusaver";
-const int APP_VERSION_NUMBER = 5;
-const String APP_VERSION_NAME = "v.1.0.5";
+const int APP_VERSION_NUMBER = 7;
+const String APP_VERSION_NAME = "v.1.0.7";
 
 /// LIST OF SUPPORTED LOCALE LANGUAGES
 /// Add your new supported Locale language to the array list.
@@ -20,7 +20,7 @@ const List<Locale> SUPPORTED_LOCALES = [
 
 /// User Reward Minutes
 ///
-const int REWARDED_MINUTES = 120;
+const int REWARDED_MINUTES = 15;
 
 /// REMOVE ADS - GOOGLE PLAY SUBSCRIPTIONS IDS
 ///
@@ -54,4 +54,4 @@ const String ADMOB_INTERSTITIAL_ID = "ca-app-pub-8521044456540023/5391914639";
 const String ADMOB_REWARDED_VIDEO_ID = "ca-app-pub-8521044456540023/4302612443";
 
 // FACEBOOK SETTINGS
-const String FACEBOOK_USERNAME = "praysoft";
+const String FACEBOOK_USERNAME = "sgermosen24";

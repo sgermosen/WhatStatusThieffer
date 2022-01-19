@@ -6,7 +6,7 @@ import 'package:scoped_model/scoped_model.dart';
 class AppModel extends Model {
   // Variables
   bool showAds = true;
-  bool addWatermark = true;
+  bool addWatermark = false;
   bool isDarkThemeEnabled = false;
   bool isRewarded = false;
   int rewardedCounter = 0;
