@@ -13,13 +13,13 @@ class _GuideScreenState extends State<GuideScreen> {
 
   @override
   void initState() {
-    Ads.showInterstitialAd();
+    //Ads.showInterstitialAd();
     super.initState();
   }
 
   @override
   void dispose() {
-    Ads.disposeInterstitialAd();
+    //Ads.disposeInterstitialAd();
     super.dispose();
   }
 

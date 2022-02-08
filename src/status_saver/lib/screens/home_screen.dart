@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
+//import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/app_model.dart';
@@ -25,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   /// Variables
   // in_app_purchase stream
-  StreamSubscription<List<PurchaseDetails>> _inAppPurchaseStream;
+  // StreamSubscription<List<PurchaseDetails>> _inAppPurchaseStream;
   AppLocalizations _i18n;
 
   /// Check User Active Subsscriptions to Update App UI
@@ -62,67 +62,67 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   /// Handle in-app purchases Upates
-  void _handlePurchaseUpdates() {
-    // listen purchase updates
+//   void _handlePurchaseUpdates() {
+//     // listen purchase updates
 
-    _inAppPurchaseStream = InAppPurchase.instance.purchaseStream
-        //InAppPurchaseConnection
-        // .instance.purchaseUpdatedStream
-        .listen((purchases) async {
-      // Loop incoming purchases
-      for (var purchase in purchases) {
-        // Control purchase status
-        switch (purchase.status) {
-          case PurchaseStatus.pending:
-            // Handle this case.
-            break;
-          case PurchaseStatus.purchased:
+//  //   _inAppPurchaseStream = InAppPurchase.instance.purchaseStream
+//         //InAppPurchaseConnection
+//         // .instance.purchaseUpdatedStream
+//        // .listen((purchases) async {
+//       // Loop incoming purchases
+//       for (var purchase in purchases) {
+//         // Control purchase status
+//         switch (purchase.status) {
+//           case PurchaseStatus.pending:
+//             // Handle this case.
+//             break;
+//           case PurchaseStatus.purchased:
 
-            /// **** Deliver Subscription to User **** ///
-            ///
-            /// Check Subscription ID to Update App UI
-            if (purchase.productID.startsWith('ads')) {
-              // Disable showing Ads
-              AppModel().disableShowAds();
-            } else if (purchase.productID.startsWith('watermark')) {
-              // Disable watermarking status
-              AppModel().disableWatermark();
-            }
+//             /// **** Deliver Subscription to User **** ///
+//             ///
+//             /// Check Subscription ID to Update App UI
+//             if (purchase.productID.startsWith('ads')) {
+//               // Disable showing Ads
+//               AppModel().disableShowAds();
+//             } else if (purchase.productID.startsWith('watermark')) {
+//               // Disable watermarking status
+//               AppModel().disableWatermark();
+//             }
 
-            debugPrint('Subscription ID -> ${purchase.productID}');
+//             debugPrint('Subscription ID -> ${purchase.productID}');
 
-            if (purchase.pendingCompletePurchase) {
-              /// Complete pending purchase
-              InAppPurchase.instance.completePurchase(purchase);
-              //  InAppPurchaseConnection.instance.completePurchase(purchase);
-              debugPrint('Success pending purchase completed!');
-            }
-            break;
-          case PurchaseStatus.error:
-            // Handle this case.
-            debugPrint('purchase error-> ${purchase.error.message}');
-            break;
-        }
-      }
-    });
-  }
+//             if (purchase.pendingCompletePurchase) {
+//               /// Complete pending purchase
+//               InAppPurchase.instance.completePurchase(purchase);
+//               //  InAppPurchaseConnection.instance.completePurchase(purchase);
+//               debugPrint('Success pending purchase completed!');
+//             }
+//             break;
+//           case PurchaseStatus.error:
+//             // Handle this case.
+//             debugPrint('purchase error-> ${purchase.error.message}');
+//             break;
+//         }
+//       }
+//     });
+//   }
 
   @override
   void initState() {
     super.initState();
     _checkUserActiveSubscriptions().then((showAds) {
       // Check to show Banner Ad
-      Ads.showBannerAd(showAds: showAds);
+      //  Ads.showBannerAd(showAds: showAds);
     });
     // Listeners update
-    _handlePurchaseUpdates();
+    // _handlePurchaseUpdates();
   }
 
   @override
   void dispose() {
     super.dispose();
-    Ads.disposeBannerAd();
-    _inAppPurchaseStream.cancel();
+    //Ads.disposeBannerAd();
+    // _inAppPurchaseStream.cancel();
   }
 
   // Tabs list

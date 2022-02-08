@@ -52,7 +52,7 @@ class SavedStatusTabState extends State<SavedStatusTab> {
 
   @override
   void dispose() {
-    Ads.disposeInterstitialAd();
+    // Ads.disposeInterstitialAd();
     super.dispose();
   }
 
@@ -131,7 +131,7 @@ class SavedStatusTabState extends State<SavedStatusTab> {
                       isVideo: statusPath.endsWith('.mp4'),
                       onLongPress: () => AppModel().selectStatuses(statusPath),
                       onTap: () => _viewStatus(statusPath),
-                      onSave: Ads.showInterstitialAd,
+                      // onSave: Ads.showInterstitialAd,
                       onDelete: () {
                         _deleteStatus(_savedStatusList[index]);
                       });

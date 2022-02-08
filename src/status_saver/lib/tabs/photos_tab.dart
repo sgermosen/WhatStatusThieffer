@@ -76,7 +76,7 @@ class _PhotosTabState extends State<PhotosTab> {
   @override
   void dispose() {
     super.dispose();
-    Ads.disposeInterstitialAd();
+    //  Ads.disposeInterstitialAd();
   }
 
   @override
@@ -105,7 +105,7 @@ class _PhotosTabState extends State<PhotosTab> {
               onTap: () {
                 _viewStatus(_imageList[index]);
               },
-              onSave: Ads.showInterstitialAd,
+              // onSave: Ads.showInterstitialAd,
             );
           });
     } else {

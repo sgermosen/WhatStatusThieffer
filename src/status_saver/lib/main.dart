@@ -8,7 +8,7 @@ import 'package:status_saver/app/app_localizations.dart';
 import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/app_model.dart';
 import 'package:status_saver/screens/start_screen.dart';
-import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+//import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 void main() async {
   // For play billing library 2.0 on Android, it is mandatory to call
@@ -16,7 +16,7 @@ void main() async {
   // as part of initializing the app.
   // InAppPurchaseConnection.enablePendingPurchases();
   if (defaultTargetPlatform == TargetPlatform.android) {
-    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
+    //InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   }
   runApp(MyApp());
 }

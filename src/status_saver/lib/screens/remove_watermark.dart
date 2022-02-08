@@ -17,22 +17,25 @@ class RemoveWatermarkScreen extends StatelessWidget {
         child: Column(
           children: [
             // Header message
-             Card(
+            Card(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(i18n.translate('save_your_status_10x_faster_without_the_watermark'),
-                style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
-              ), 
-             ),
-             Divider(),
-            // List of subscriptions
-            StoreProducts(
-              subscriptionIDs: REMOVE_WATERMARK_SUB_IDS,
-              icon: CircleAvatar(
-                backgroundColor: Colors.teal,
-                child: Icon(Icons.copyright_rounded, color: Colors.white),
+                child: Text(
+                    i18n.translate(
+                        'save_your_status_10x_faster_without_the_watermark'),
+                    style: TextStyle(fontSize: 18),
+                    textAlign: TextAlign.center),
               ),
             ),
+            Divider(),
+            // List of subscriptions
+            // StoreProducts(
+            //   subscriptionIDs: REMOVE_WATERMARK_SUB_IDS,
+            //   icon: CircleAvatar(
+            //     backgroundColor: Colors.teal,
+            //     child: Icon(Icons.copyright_rounded, color: Colors.white),
+            //   ),
+            // ),
           ],
         ),
       ),

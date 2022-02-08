@@ -77,15 +77,15 @@ class MyNavigationDrawer extends StatelessWidget {
           trailing: Icon(Icons.arrow_forward),
           onTap: () async {
             // Go to Rewarded Videos screen
-            await Navigator.of(context)
-                .push(new MaterialPageRoute(
-                    builder: (context) => RewardedVideosScreen()))
-                .then((_) {
-              // Check to hide Banner Ads
-              if (AppModel().isRewarded) {
-                Ads.disposeBannerAd();
-              }
-            });
+            // await Navigator.of(context)
+            //     .push(new MaterialPageRoute(
+            //        // builder: (context) => RewardedVideosScreen()))
+            //     .then((_) {
+            //   // Check to hide Banner Ads
+            //   // if (AppModel().isRewarded) {
+            //   //   Ads.disposeBannerAd();
+            //   // }
+            // });
           },
         ),
 

@@ -26,7 +26,7 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
 
   @override
   void dispose() {
-    Ads.disposeInterstitialAd();
+    //  Ads.disposeInterstitialAd();
     super.dispose();
   }
 
@@ -51,7 +51,7 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
                       style: TextStyle(fontSize: 20.0)), //`Text` to display
                   onPressed: () async {
                     // Show Ad
-                    Ads.showInterstitialAd();
+                    //Ads.showInterstitialAd();
 
                     /// Save image
                     _app.saveFileInGallery(context, filePath: widget.filePath);

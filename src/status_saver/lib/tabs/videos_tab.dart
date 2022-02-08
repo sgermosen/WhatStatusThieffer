@@ -77,7 +77,7 @@ class VideosTabState extends State<VideosTab> {
   @override
   void dispose() {
     super.dispose();
-    Ads.disposeInterstitialAd();
+    //  Ads.disposeInterstitialAd();
   }
 
   @override
@@ -109,7 +109,7 @@ class VideosTabState extends State<VideosTab> {
               onTap: () {
                 _viewStatus(_videoList[index]);
               },
-              onSave: Ads.showInterstitialAd,
+              //    onSave: Ads.showInterstitialAd,
             );
           });
     } else {

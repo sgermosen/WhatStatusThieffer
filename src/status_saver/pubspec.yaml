@@ -30,7 +30,7 @@ dependencies:
   chewie: ^1.2.2
   video_thumbnail: ^0.3.3
   path_provider: ^2.0.2
-  firebase_admob: ^0.11.2
+  #firebase_admob: ^0.11.2
   url_launcher: ^6.0.7
   permission_handler: ^8.1.1
   flutter_launcher_icons: ^0.9.0
@@ -38,10 +38,10 @@ dependencies:
   font_awesome_flutter: ^9.1.0
   # New Feature Packages
   shared_preferences: ^2.0.6
-  in_app_purchase: ^1.0.6
+  #in_app_purchase: ^1.0.6
   scoped_model: ^1.1.0
   flutter_ffmpeg: ^0.4.0
-  flutter_local_notifications: ^6.0.0
+  #flutter_local_notifications: ^6.0.0
   fluttertoast: ^8.0.7
   file_picker: ^3.0.3
   version: ^2.0.0

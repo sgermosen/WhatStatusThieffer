@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/app/app.dart';
@@ -14,18 +13,17 @@ class StartScreen extends StatefulWidget {
 
 class _StartScreenState extends State<StartScreen> {
   // Variables
-  final NotificationManager _notificationManager = new NotificationManager();
+  //final NotificationManager _notificationManager = new NotificationManager();
   final App _app = new App();
 
   void _initializations() async {
     // Init Admob app
-    await Ads.initialize();
+    //  await Ads.initialize();
 
     // Schedule notification reminder
-    Future.delayed(Duration.zero, () {
-      _notificationManager.showPeriodicallyNotification(context);
-    });
- 
+    //  Future.delayed(Duration.zero, () {
+    //  _notificationManager.showPeriodicallyNotification(context);
+    //   });
   }
 
   @override
