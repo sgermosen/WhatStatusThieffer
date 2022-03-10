@@ -3,6 +3,9 @@
  
 # Knowed Issues
 
+## Android 11 and 12 is not working: 
+With the privacy updates they change the rules to access to those folders, so now is not working propertly in those platform.
+
 ## Bulk delete is not really deleting well: 
 On saved status if you press for 2 seconds, the bulk delete its enabled, but, apparently it work, it remove it from the screen, but, when you close the app, the deleted status are still there.
 
