@@ -519,7 +519,8 @@ subido, junto con la cadena de herramientas necesaria:
 > Kotlin 1.8.10 es compatible con Flutter 3.7 y compila contra SDK 34.
 >
 > Si quieres usar un Flutter más nuevo (Dart 3), primero hay que **migrar la app
-> a sound null safety** (tarea aparte, ~25 archivos).
+> a sound null safety** (tarea aparte, ~28 archivos). El paso a paso completo
+> está en **[docs/MIGRACION_NULL_SAFETY.md](MIGRACION_NULL_SAFETY.md)**.
 
 **Dependencias antiguas — ✅ ya saneadas en el repo:**
 - `share` (descontinuado) → migrado a **`share_plus ^4.5.3`** (misma API).
