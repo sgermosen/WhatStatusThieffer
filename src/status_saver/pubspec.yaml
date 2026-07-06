@@ -39,7 +39,9 @@ dependencies:
   url_launcher: ^6.0.7
   permission_handler: ^8.1.1
   flutter_launcher_icons: ^0.9.0
-  share: ^2.0.4
+  # share is discontinued; share_plus 4.5.x keeps the same Share.shareFiles /
+  # Share.share API and works with Flutter 3.7 (Dart 2.19).
+  share_plus: ^4.5.3
   font_awesome_flutter: ^9.1.0
   # New Feature Packages
   shared_preferences: ^2.0.6
