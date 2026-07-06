@@ -521,12 +521,18 @@ subido, junto con la cadena de herramientas necesaria:
 > Si quieres usar un Flutter más nuevo (Dart 3), primero hay que **migrar la app
 > a sound null safety** (tarea aparte, ~25 archivos).
 
-**Riesgos de dependencias antiguas a vigilar al compilar** (no se pudieron probar
-sin SDK de Flutter en el entorno):
-- `flutter_ffmpeg: ^0.4.0` está **descontinuado** y puede fallar a compilar con
-  AGP 7 / SDK 34. Si da problemas, migra a `ffmpeg_kit_flutter_min_gpl` o elimina
-  la función de marca de agua por video. Solo se usa para la marca de agua.
-- `share: ^2.0.4` está descontinuado; considera migrar a `share_plus`.
+**Dependencias antiguas — ✅ ya saneadas en el repo:**
+- `share` (descontinuado) → migrado a **`share_plus ^4.5.3`** (misma API).
+- `flutter_ffmpeg` (descontinuado, rompía el build con AGP 7 / SDK 34) →
+  **eliminado**. La marca de agua ahora se hace en **Dart puro con el paquete
+  `image`** y se aplica **solo a fotos**; los videos se guardan sin marca (más
+  rápido, sin re-encodear). Ajusta la opacidad con `_watermarkOpacity` en
+  `lib/app/app.dart`.
+
+> Nota de rendimiento: el compositado de la marca corre en el hilo principal
+> (con el diálogo "Procesando…"); para imágenes de estado normales es
+> instantáneo. Si algún día lo notas lento con imágenes enormes, muévelo a un
+> `compute()`/isolate.
 
 Requisitos de almacenamiento: en Android 13+ los permisos cambian (esta rama ya
 declara `READ_MEDIA_IMAGES`/`READ_MEDIA_VIDEO`). Para acceso amplio a carpetas de

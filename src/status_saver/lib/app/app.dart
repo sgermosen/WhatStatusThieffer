@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-//import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -17,7 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class App {
-  final FlutterFFmpeg _flutterFFmpeg = new FlutterFFmpeg();
   final String _savedStatusDirKey = 'saved_status_dir';
   final String _autoPlayVideoKey = 'auto_play_video';
   final String _darkThemeKey = 'dark_theme';
@@ -65,42 +63,75 @@ class App {
     await _prefs.setBool(_darkThemeKey, newValue);
   }
 
-  //Todo: Here is an error with the output, because this need to be deleted when the conversion it's done
-  /// Copy Asset to Temporary Directory
-  /// to be used for watermark
-  Future<String> _copyAssetToTempDir(String assetName, String fileName) async {
-    // Load asset from app assets
-    final ByteData assetByteData = await rootBundle.load(assetName);
+  /// Opacity of the watermark (0..1). Lower = more transparent/subtle.
+  static const double _watermarkOpacity = 0.28;
 
-    // Get byteList from asset
-    final List<int> byteList = assetByteData.buffer
-        .asUint8List(assetByteData.offsetInBytes, assetByteData.lengthInBytes);
+  /// Composite a subtle watermark onto an IMAGE and write it to [outputPath].
+  ///
+  /// Returns true if the watermark was applied. Videos (and anything that is
+  /// not a supported image) return false and should be copied as-is: on-device
+  /// video re-encoding was dropped along with the discontinued flutter_ffmpeg
+  /// dependency.
+  Future<bool> _applyImageWatermark(
+      {@required String inputPath, @required String outputPath}) async {
+    final String ext = inputPath.split('.').last.toLowerCase();
+    const List<String> imageExts = [
+      'jpg',
+      'jpeg',
+      'png',
+      'gif',
+      'webp',
+      'bmp'
+    ];
+    if (!imageExts.contains(ext)) return false;
 
-    // Get Temporary Directory
-    final Directory tempDir = await getTemporaryDirectory();
+    try {
+      // Decode the source image.
+      final img.Image base = img.decodeImage(await File(inputPath).readAsBytes());
+      if (base == null) return false;
 
-    // Returns the absolute file path from temp dir
+      // Decode the watermark asset.
+      final ByteData wmData =
+          await rootBundle.load('assets/images/status_watermark.png');
+      img.Image wm = img.decodePng(wmData.buffer.asUint8List());
+      if (wm == null) return false;
 
-    return (await File('${tempDir.path}/$fileName')
-            .writeAsBytes(byteList, mode: FileMode.writeOnly, flush: true))
-        .path;
+      // Scale the watermark to ~28% of the image width (keep aspect ratio).
+      final int targetW = (base.width * 0.28).round();
+      if (targetW > 0) wm = img.copyResize(wm, width: targetW);
+
+      // Fade the watermark to make it subtle.
+      wm = _fadeImage(wm, _watermarkOpacity);
+
+      // Composite at the bottom-right corner with a 10px margin.
+      int dx = base.width - wm.width - 10;
+      int dy = base.height - wm.height - 10;
+      if (dx < 0) dx = 0;
+      if (dy < 0) dy = 0;
+      img.copyInto(base, wm, dstX: dx, dstY: dy, blend: true);
+
+      // Re-encode (keep PNG for png inputs, otherwise JPG).
+      final List<int> bytes =
+          ext == 'png' ? img.encodePng(base) : img.encodeJpg(base, quality: 90);
+      await File(outputPath).writeAsBytes(bytes, flush: true);
+      return true;
+    } catch (e) {
+      // On any decoding/encoding error, fall back to copying the original.
+      // print('watermark error: $e');
+      return false;
+    }
   }
 
-  /// Add Watermark logo to Video/Image Status
-  /// Returns the output status directory path
-  Future<void> addWatermark(
-      {@required String inputSatusPath,
-      @required String outputStatusPath}) async {
-    // Get Watermark logo
-    final String watermarkPath = await _copyAssetToTempDir(
-        'assets/images/status_watermark.png', 'status_watermark.png');
-
-    // Add Watermark with reduced opacity so it is subtle (aa = alpha, 0..1).
-    // Lower `aa` = more transparent. Change here to make it more/less visible.
-    await _flutterFFmpeg
-        .execute(
-            "-i \"$inputSatusPath\" -i $watermarkPath -filter_complex '[1]format=rgba,colorchannelmixer=aa=0.28[wm];[0][wm]overlay=x=W-w-10:y=H-h-10' -y \"$outputStatusPath\" ")
-        .then((rc) => print("FFmpeg process exited with rc $rc"));
+  /// Multiply the alpha channel of [src] by [opacity] (0..1) to fade it.
+  img.Image _fadeImage(img.Image src, double opacity) {
+    for (int y = 0; y < src.height; y++) {
+      for (int x = 0; x < src.width; x++) {
+        final int color = src.getPixel(x, y);
+        final int alpha = img.getAlpha(color);
+        src.setPixel(x, y, img.setAlpha(color, (alpha * opacity).round()));
+      }
+    }
+    return src;
   }
 
   //Todo: Really I think than this is an stupid functionality if the watermark it's active
@@ -116,15 +147,14 @@ class App {
     // Show processing dialog
     processingDialog(context);
 
-    /// Check Active Remove-Ads Subscription to Watermark the Status
-    ///
+    /// Watermark the status (photos only) unless the user removed it / is rewarded
     if (AppModel().addWatermark && !AppModel().isRewarded) {
-      // Remane the status
-      outputStatusPath =
+      final String candidate =
           "$tempDir/DOWNLOAD-ON-PLAYSTORE-${statusPath.split('/').last}";
-      // Add watermark
-      await addWatermark(
-          inputSatusPath: statusPath, outputStatusPath: outputStatusPath);
+      final bool applied = await _applyImageWatermark(
+          inputPath: statusPath, outputPath: candidate);
+      // Only share the watermarked copy if it was actually produced.
+      if (applied) outputStatusPath = candidate;
     }
 
     // Close pr dialog
@@ -304,13 +334,14 @@ class App {
     final String outputStatusPath =
         "$statusDir/Status-${DateTime.now().millisecondsSinceEpoch.toString()}.$fileExt";
 
-    /// Check User Active Remove-Watermark Subscription
+    /// Watermark (photos only) unless the user removed it / is rewarded.
+    bool watermarked = false;
     if (AppModel().addWatermark && !AppModel().isRewarded) {
-      /***  Add watermark to Status ***/
-      await addWatermark(
-          inputSatusPath: filePath, outputStatusPath: outputStatusPath);
-    } else {
-      // Copy status to new dir without watermark
+      watermarked = await _applyImageWatermark(
+          inputPath: filePath, outputPath: outputStatusPath);
+    }
+    if (!watermarked) {
+      // Videos and any non-watermarked media are copied unchanged.
       File(filePath).copySync(outputStatusPath);
     }
 

@@ -29,10 +29,6 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-ext {
-    flutterFFmpegPackage = 'min-gpl-lts'
-}
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
