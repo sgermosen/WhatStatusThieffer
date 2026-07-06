@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" font-family="Segoe UI, Roboto, Arial, sans-serif">
+  <rect width="1080" height="1920" fill="#e0f2f1"/>
+  <rect width="1080" height="230" fill="#00695c"/>
+  <text x="540" y="120" fill="#ffffff" font-size="60" font-weight="700" text-anchor="middle">Guarda fotos y videos</text>
+  <text x="540" y="195" fill="#b2dfdb" font-size="50" font-weight="500" text-anchor="middle">con un solo toque</text>
+
+  <rect x="140" y="290" width="800" height="1560" rx="48" fill="#ffffff" stroke="#b0bec5" stroke-width="4"/>
+  <!-- App bar + tabs -->
+  <rect x="140" y="290" width="800" height="120" rx="48" fill="#009688"/>
+  <rect x="140" y="360" width="800" height="50" fill="#009688"/>
+  <text x="200" y="368" fill="#ffffff" font-size="40" font-weight="700">Instagram</text>
+  <rect x="140" y="410" width="800" height="80" fill="#00897b"/>
+  <text x="270" y="462" fill="#ffffff" font-size="32" font-weight="700" text-anchor="middle">IMÁGENES</text>
+  <text x="540" y="462" fill="#b2dfdb" font-size="32" text-anchor="middle">VIDEOS</text>
+  <text x="810" y="462" fill="#b2dfdb" font-size="32" text-anchor="middle">GUARDADOS</text>
+  <rect x="180" y="480" width="180" height="6" fill="#ffffff"/>
+
+  <!-- grid of media cards -->
+  <g>
+    <rect x="180" y="530" width="340" height="440" rx="14" fill="#cfd8dc"/>
+    <circle cx="350" cy="750" r="55" fill="#eceff1"/>
+    <polygon points="330,720 330,780 385,750" fill="#90a4ae"/>
+    <rect x="200" y="900" width="150" height="50" rx="25" fill="#009688"/>
+    <text x="275" y="935" fill="#ffffff" font-size="30" text-anchor="middle">Guardar</text>
+  </g>
+  <g>
+    <rect x="560" y="530" width="340" height="440" rx="14" fill="#b2dfdb"/>
+    <rect x="580" y="900" width="150" height="50" rx="25" fill="#009688"/>
+    <text x="655" y="935" fill="#ffffff" font-size="30" text-anchor="middle">Guardar</text>
+  </g>
+  <g>
+    <rect x="180" y="990" width="340" height="440" rx="14" fill="#b2dfdb"/>
+    <rect x="200" y="1360" width="150" height="50" rx="25" fill="#009688"/>
+    <text x="275" y="1395" fill="#ffffff" font-size="30" text-anchor="middle">Guardar</text>
+  </g>
+  <g>
+    <rect x="560" y="990" width="340" height="440" rx="14" fill="#cfd8dc"/>
+    <circle cx="730" cy="1210" r="55" fill="#eceff1"/>
+    <polygon points="710,1180 710,1240 765,1210" fill="#90a4ae"/>
+    <rect x="580" y="1360" width="150" height="50" rx="25" fill="#009688"/>
+    <text x="655" y="1395" fill="#ffffff" font-size="30" text-anchor="middle">Guardar</text>
+  </g>
+  <g>
+    <rect x="180" y="1450" width="340" height="360" rx="14" fill="#b2dfdb"/>
+  </g>
+  <g>
+    <rect x="560" y="1450" width="340" height="360" rx="14" fill="#cfd8dc"/>
+  </g>
+</svg>

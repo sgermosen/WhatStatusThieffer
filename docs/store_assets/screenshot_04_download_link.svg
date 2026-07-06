@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" font-family="Segoe UI, Roboto, Arial, sans-serif">
+  <rect width="1080" height="1920" fill="#e0f2f1"/>
+  <rect width="1080" height="230" fill="#00695c"/>
+  <text x="540" y="120" fill="#ffffff" font-size="58" font-weight="700" text-anchor="middle">Pega un link y</text>
+  <text x="540" y="195" fill="#b2dfdb" font-size="50" font-weight="500" text-anchor="middle">descárgalo al instante</text>
+
+  <rect x="140" y="290" width="800" height="1560" rx="48" fill="#ffffff" stroke="#b0bec5" stroke-width="4"/>
+  <rect x="140" y="290" width="800" height="120" rx="48" fill="#009688"/>
+  <rect x="140" y="360" width="800" height="50" fill="#009688"/>
+  <text x="200" y="368" fill="#ffffff" font-size="40" font-weight="700">Descargar desde un enlace</text>
+
+  <!-- link icon -->
+  <text x="540" y="600" font-size="130" text-anchor="middle">🔗</text>
+  <text x="540" y="690" fill="#455a64" font-size="34" text-anchor="middle">Pega un enlace para descargar</text>
+  <text x="540" y="738" fill="#455a64" font-size="34" text-anchor="middle">su foto o video</text>
+
+  <!-- input field -->
+  <rect x="200" y="800" width="680" height="150" rx="14" fill="#ffffff" stroke="#009688" stroke-width="4"/>
+  <text x="230" y="865" fill="#37474f" font-size="30">https://www.tiktok.com/@user/video/…</text>
+  <rect x="790" y="820" width="70" height="70" rx="10" fill="#e0f2f1"/>
+  <text x="825" y="868" font-size="38" text-anchor="middle">📋</text>
+
+  <!-- detected -->
+  <circle cx="230" cy="1010" r="22" fill="#009688"/>
+  <text x="230" y="1022" fill="#fff" font-size="26" text-anchor="middle">✓</text>
+  <text x="270" y="1022" fill="#37474f" font-size="32">Detectado: TikTok</text>
+
+  <!-- download button -->
+  <rect x="200" y="1090" width="680" height="120" rx="16" fill="#009688"/>
+  <text x="540" y="1165" fill="#ffffff" font-size="44" font-weight="700" text-anchor="middle">⬇  Descargar</text>
+
+  <!-- disclaimer -->
+  <rect x="200" y="1270" width="680" height="220" rx="12" fill="#fff8e1"/>
+  <text x="230" y="1330" fill="#8d6e63" font-size="28">Descarga solo contenido tuyo o con</text>
+  <text x="230" y="1372" fill="#8d6e63" font-size="28">permiso. Funciona mejor con videos</text>
+  <text x="230" y="1414" fill="#8d6e63" font-size="28">públicos de TikTok/Facebook. Solo</text>
+  <text x="230" y="1456" fill="#8d6e63" font-size="28">enlaces públicos.</text>
+</svg>
