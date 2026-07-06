@@ -52,6 +52,11 @@ dependencies:
   # 1.8.x changed the API, so do not widen this range without updating
   # start_screen.dart accordingly.
   receive_sharing_intent: 1.4.5
+  # Ads (AdMob). 0.13.x has the modern static-load API and supports Dart 2.12+.
+  google_mobile_ads: ^0.13.6
+  # In-app purchases / subscriptions (remove ads / watermark).
+  in_app_purchase: ^1.0.9
+  in_app_purchase_android: ^0.1.6
 
 dev_dependencies:
   flutter_test:

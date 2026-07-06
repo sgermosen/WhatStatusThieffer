@@ -257,9 +257,15 @@ Declara con precisión. Para esta app:
 
 ## 5. Compras dentro de la app (suscripciones)
 
+> ✅ **Ya reactivado en código** en esta rama: `lib/services/purchases.dart`,
+> `lib/widgets/store_products.dart`, `remove_ads_screen.dart`, la entrada del
+> menú y la inicialización en `main.dart`. Lo de abajo queda como referencia y
+> para el trabajo que **sí o sí es en la web** (crear los productos en Play
+> Console). Recuerda correr `flutter pub get`.
+
 El código ya trae definidos los **IDs de suscripción** (en
-`lib/constants/app_constants.dart`), pero la lógica de `in_app_purchase` está
-**comentada**. Aquí está todo para activarla y por qué "nunca funcionó":
+`lib/constants/app_constants.dart`). Aquí está todo para activarla y por qué
+"nunca funcionó":
 casi siempre es porque **los productos no estaban creados/activos en Play
 Console**, la app **no estaba subida a un track** (interno como mínimo), o se
 probaba con una cuenta que no es **tester de licencia**.
@@ -389,6 +395,11 @@ sus entradas en el drawer (`my_navigation_drawer.dart`, hoy comentadas).
 ---
 
 ## 6. Publicidad con AdMob
+
+> ✅ **Ya reactivado en código** en esta rama: `lib/app/ads.dart` reescrito con
+> `google_mobile_ads`, inicialización en `main.dart`, banner en `home_screen.dart`
+> e intersticial al guardar (tabs). Lo de abajo queda como referencia y para la
+> configuración **en AdMob/Play** (que es en la web). Corre `flutter pub get`.
 
 El código viejo usaba `firebase_admob` (deprecado). Hoy se usa
 **`google_mobile_ads`**. Los **IDs ya existen** en `app_constants.dart` y el

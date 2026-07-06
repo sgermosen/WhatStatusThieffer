@@ -110,7 +110,7 @@ class VideosTabState extends State<VideosTab> {
               onTap: () {
                 _viewStatus(_videoList[index]);
               },
-              //    onSave: Ads.showInterstitialAd,
+              onSave: Ads.showInterstitial,
             );
           });
     } else {

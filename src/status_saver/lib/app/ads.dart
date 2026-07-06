@@ -1,78 +1,72 @@
-// import 'package:firebase_admob/firebase_admob.dart';
-// import 'package:status_saver/constants/app_constants.dart';
-// import 'package:status_saver/models/app_model.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:status_saver/constants/app_constants.dart';
+import 'package:status_saver/models/app_model.dart';
 
-// class Ads {
-//   // Variables
-//   static BannerAd _bannerAd;
-//   static InterstitialAd _interstitialAd;
+/// AdMob helper (google_mobile_ads).
+///
+/// Ad unit IDs come from `app_constants.dart`. For local testing replace them
+/// with Google's official test IDs so you don't risk your AdMob account with
+/// invalid clicks (see docs/GUIA_PUBLICACION_PLAYSTORE.md §6).
+class Ads {
+  static InterstitialAd _interstitial;
+  static bool _initialized = false;
 
-//   static Future<void> initialize() async {
-//     FirebaseAdMob.instance.initialize(appId: ADMOB_APP_ID);
-//   }
+  /// Initialize the Mobile Ads SDK and preload an interstitial.
+  /// Call once at app startup.
+  static Future<void> initialize() async {
+    if (_initialized) return;
+    await MobileAds.instance.initialize();
+    _initialized = true;
+    loadInterstitial();
+  }
 
-//   /// Setup admob info
-//   static final MobileAdTargetingInfo _targetingInfo = new MobileAdTargetingInfo(
-//     childDirected: false,
-//   );
+  /// Create a banner ad. The caller is responsible for loading it (`load()`),
+  /// rendering it with `AdWidget`, and disposing it.
+  static BannerAd createBanner({BannerAdListener listener}) {
+    return BannerAd(
+      adUnitId: ADMOB_BANNER_ID,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: listener ??
+          BannerAdListener(
+            onAdFailedToLoad: (ad, error) => ad.dispose(),
+          ),
+    );
+  }
 
-//   // Create Banner Ad
-//   static BannerAd _createBannerAd() {
-//     return BannerAd(
-//       adUnitId: ADMOB_BANNER_ID,
-//       size: AdSize.banner,
-//       targetingInfo: _targetingInfo,
-//       listener: (MobileAdEvent event) {
-//         //print("BannerAd event $event");
-//       },
-//     );
-//   }
+  /// Preload an interstitial so it is ready to show instantly.
+  static void loadInterstitial() {
+    InterstitialAd.load(
+      adUnitId: ADMOB_INTERSTITIAL_ID,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => _interstitial = ad,
+        onAdFailedToLoad: (error) => _interstitial = null,
+      ),
+    );
+  }
 
-//   /// Create Interstitial Ad
-//   static InterstitialAd _createInterstitialAd() {
-//     return new InterstitialAd(
-//         adUnitId: ADMOB_INTERSTITIAL_ID,
-//         targetingInfo: _targetingInfo,
-//         listener: (MobileAdEvent event) {
-//           //  print('InterstitialAd MobileAdEvent: $event');
-//         });
-//   }
-
-//   // Show Banner Ad
-//   static void showBannerAd({bool showAds}) {
-//     // Get show ads value
-//     bool _showAds = showAds ?? AppModel().showAds;
-
-//     /// Check Active Remove-Ads Subscription
-//     if (_showAds && !AppModel().isRewarded) {
-//       if (_bannerAd == null) _bannerAd = _createBannerAd();
-//       _bannerAd
-//         ..load()
-//         ..show(anchorOffset: 0.0, anchorType: AnchorType.bottom);
-//     }
-//   }
-
-//   // Show Interstitial Ad
-//   static void showInterstitialAd() {
-//     /// Check Active Remove-Ads Subscription
-//     if (AppModel().showAds && !AppModel().isRewarded) {
-//       if (_interstitialAd == null) _interstitialAd = _createInterstitialAd();
-//       _interstitialAd
-//         ..load()
-//         ..show();
-//     }
-//   }
-
-//   // Dispose Banner Ad
-//   static void disposeBannerAd() async {
-//     await _bannerAd?.dispose();
-//     _bannerAd = null;
-//   }
-
-//   // Dispose Interstitial Ad
-//   static void disposeInterstitialAd() async {
-//     await _interstitialAd?.dispose();
-//     _interstitialAd = null;
-//   }
-
-// }
+  /// Show the preloaded interstitial (unless the user removed ads / is
+  /// rewarded), then preload the next one.
+  static void showInterstitial() {
+    if (!AppModel().showAds || AppModel().isRewarded) return;
+    final InterstitialAd ad = _interstitial;
+    if (ad == null) {
+      // Nothing ready; make sure one is loading for next time.
+      loadInterstitial();
+      return;
+    }
+    ad.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        loadInterstitial();
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        loadInterstitial();
+      },
+    );
+    ad.show();
+    _interstitial = null;
+  }
+}

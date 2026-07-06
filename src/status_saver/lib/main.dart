@@ -1,23 +1,31 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-// import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/app/app.dart';
 import 'package:status_saver/app/app_localizations.dart';
 import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/app_model.dart';
 import 'package:status_saver/screens/start_screen.dart';
-//import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:status_saver/services/purchases.dart';
 
 void main() async {
-  // For play billing library 2.0 on Android, it is mandatory to call
-  // [enablePendingPurchases](https://developer.android.com/reference/com/android/billingclient/api/BillingClient.Builder.html#enablependingpurchases)
-  // as part of initializing the app.
-  // InAppPurchaseConnection.enablePendingPurchases();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // For Play Billing on Android it is mandatory to enable pending purchases
+  // before initializing in-app purchases.
   if (defaultTargetPlatform == TargetPlatform.android) {
-    //InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
+    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   }
+
+  // Start listening for purchase updates (remove ads / watermark).
+  Purchases().init();
+
+  // Initialize AdMob and preload an interstitial.
+  Ads.initialize();
+
   runApp(MyApp());
 }
 

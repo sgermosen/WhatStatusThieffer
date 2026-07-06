@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-//import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/app_model.dart';
@@ -25,9 +25,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   /// Variables
-  // in_app_purchase stream
-  // StreamSubscription<List<PurchaseDetails>> _inAppPurchaseStream;
   AppLocalizations _i18n;
+
+  /// Bottom banner ad
+  BannerAd _bannerAd;
+  bool _bannerLoaded = false;
 
   /// Check User Active Subsscriptions to Update App UI
   Future<bool> _checkUserActiveSubscriptions() async {
@@ -112,18 +114,30 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _checkUserActiveSubscriptions().then((showAds) {
-      // Check to show Banner Ad
-      //  Ads.showBannerAd(showAds: showAds);
+      // Load the banner ad only if the user has not removed ads.
+      if (showAds && AppModel().showAds && !AppModel().isRewarded) {
+        _loadBanner();
+      }
     });
-    // Listeners update
-    // _handlePurchaseUpdates();
+  }
+
+  /// Load the bottom banner ad.
+  void _loadBanner() {
+    _bannerAd = Ads.createBanner(
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          if (mounted) setState(() => _bannerLoaded = true);
+        },
+        onAdFailedToLoad: (ad, error) => ad.dispose(),
+      ),
+    );
+    _bannerAd.load();
   }
 
   @override
   void dispose() {
+    if (_bannerAd != null) _bannerAd.dispose();
     super.dispose();
-    //Ads.disposeBannerAd();
-    // _inAppPurchaseStream.cancel();
   }
 
   // Tabs list
@@ -173,17 +187,41 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           bottom: TabBar(tabs: getTabs(), onTap: (int index) {}),
         ),
-        body: TabBarView(physics: NeverScrollableScrollPhysics(), children: [
-          /// Images tab body
-          PhotosTab(app: widget.platform.key),
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    /// Images tab body
+                    PhotosTab(app: widget.platform.key),
 
-          /// Videos tab body
-          VideosTab(app: widget.platform.key),
+                    /// Videos tab body
+                    VideosTab(app: widget.platform.key),
 
-          /// Saved Status tab body
-          SavedStatusTab(),
-        ]),
+                    /// Saved Status tab body
+                    SavedStatusTab(),
+                  ]),
+            ),
+
+            /// Bottom banner ad
+            _buildBanner(),
+          ],
+        ),
       ),
+    );
+  }
+
+  /// Bottom banner (empty space until the ad has loaded).
+  Widget _buildBanner() {
+    if (_bannerAd == null || !_bannerLoaded) {
+      return SizedBox(width: 0, height: 0);
+    }
+    return Container(
+      alignment: Alignment.center,
+      width: _bannerAd.size.width.toDouble(),
+      height: _bannerAd.size.height.toDouble(),
+      child: AdWidget(ad: _bannerAd),
     );
   }
 }

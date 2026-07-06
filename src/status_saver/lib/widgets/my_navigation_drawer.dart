@@ -47,18 +47,19 @@ class MyNavigationDrawer extends StatelessWidget {
         Divider(thickness: 1),
 
         /// *** New features *** ///
-        // ListTile(
-        //   leading: Icon(Icons.block),
-        //   title: Text(
-        //     i18n.translate('remove_ads'),
-        //   ),
-        //   trailing: Icon(Icons.arrow_forward),
-        //   onTap: () {
-        //     // Go to Remove Ads screen
-        //     Navigator.push(context,
-        //         new MaterialPageRoute(builder: (context) => RemoveAdsScreen()));
-        //   },
-        // ),
+        ListTile(
+          leading: Icon(Icons.block, color: Colors.red),
+          title: Text(
+            i18n.translate('remove_ads'),
+            style: _menutextcolor,
+          ),
+          trailing: Icon(Icons.arrow_forward),
+          onTap: () {
+            // Go to Remove Ads screen
+            Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => RemoveAdsScreen()));
+          },
+        ),
 
         // ListTile(
         //   leading: Icon(Icons.copyright),

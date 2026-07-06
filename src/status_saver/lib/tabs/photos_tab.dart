@@ -107,7 +107,7 @@ class _PhotosTabState extends State<PhotosTab> {
               onTap: () {
                 _viewStatus(_imageList[index]);
               },
-              // onSave: Ads.showInterstitialAd,
+              onSave: Ads.showInterstitial,
             );
           });
     } else {

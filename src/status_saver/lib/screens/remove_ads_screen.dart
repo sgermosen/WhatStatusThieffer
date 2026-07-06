@@ -29,13 +29,13 @@ class RemoveAdsScreen extends StatelessWidget {
             ),
             Divider(),
             // List of subscriptions
-            // StoreProducts(
-            //   subscriptionIDs: REMOVE_ADS_SUB_IDS,
-            //   icon: CircleAvatar(
-            //     backgroundColor: Colors.red,
-            //     child: Icon(Icons.block, color: Colors.white),
-            //   ),
-            // ),
+            StoreProducts(
+              filterPrefix: 'ads',
+              icon: CircleAvatar(
+                backgroundColor: Colors.red,
+                child: Icon(Icons.block, color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),

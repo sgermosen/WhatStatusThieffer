@@ -71,7 +71,8 @@ class _StatusCardState extends State<StatusCard> {
                       IconButton(
                           icon: Icon(Icons.get_app),
                           onPressed: () {
-                            widget.onSave();
+                            // Optional callback (e.g. show an interstitial ad)
+                            if (widget.onSave != null) widget.onSave();
                             // Save status
                             _app.saveFileInGallery(context,
                                 filePath: widget.statusPath);
