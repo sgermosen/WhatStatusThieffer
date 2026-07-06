@@ -108,7 +108,7 @@ link) y lo descargamos por ti. Funciona con enlaces públicos.
 • Pestañas separadas de imágenes, videos y descargas guardadas.
 • Modo oscuro.
 • Comparte cualquier archivo guardado con tus amigos.
-• Sin marca de agua.
+• Opción premium para quitar la marca de agua.
 
 🔒 PRIVACIDAD
 La app solo lee las carpetas públicas de medios de tu dispositivo. No pedimos tu
@@ -149,7 +149,7 @@ Works with public links.
 • Separate tabs for images, videos and saved downloads.
 • Dark mode.
 • Share any saved file with your friends.
-• No watermark.
+• Premium option to remove the watermark.
 
 🔒 PRIVACY
 The app only reads the public media folders on your device. We never ask for your

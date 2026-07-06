@@ -61,19 +61,19 @@ class MyNavigationDrawer extends StatelessWidget {
           },
         ),
 
-        // ListTile(
-        //   leading: Icon(Icons.copyright),
-        //   title:
-        //       Text(i18n.translate('remove_watermark'), style: _menutextcolor),
-        //   trailing: Icon(Icons.arrow_forward),
-        //   onTap: () {
-        //     // Go to Remove Watermark screen
-        //     Navigator.push(
-        //         context,
-        //         new MaterialPageRoute(
-        //             builder: (context) => RemoveWatermarkScreen()));
-        //   },
-        // ),
+        ListTile(
+          leading: Icon(Icons.copyright, color: Colors.teal),
+          title:
+              Text(i18n.translate('remove_watermark'), style: _menutextcolor),
+          trailing: Icon(Icons.arrow_forward),
+          onTap: () {
+            // Go to Remove Watermark screen
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => RemoveWatermarkScreen()));
+          },
+        ),
 
         ListTile(
           leading: Icon(Icons.settings),
@@ -92,17 +92,12 @@ class MyNavigationDrawer extends StatelessWidget {
           leading: Icon(Icons.play_circle_fill, color: Colors.red),
           title: Text(i18n.translate('rewarded_videos'), style: _menutextcolor),
           trailing: Icon(Icons.arrow_forward),
-          onTap: () async {
+          onTap: () {
             // Go to Rewarded Videos screen
-            // await Navigator.of(context)
-            //     .push(new MaterialPageRoute(
-            //        // builder: (context) => RewardedVideosScreen()))
-            //     .then((_) {
-            //   // Check to hide Banner Ads
-            //   // if (AppModel().isRewarded) {
-            //   //   Ads.disposeBannerAd();
-            //   // }
-            // });
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => RewardedVideosScreen()));
           },
         ),
 

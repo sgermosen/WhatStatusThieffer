@@ -6,7 +6,9 @@ import 'package:scoped_model/scoped_model.dart';
 class AppModel extends Model {
   // Variables
   bool showAds = true;
-  bool addWatermark = false;
+  // Subtle watermark on saved/shared media for free users. The remove-watermark
+  // subscription (or a rewarded session) disables it via disableWatermark().
+  bool addWatermark = true;
   bool isDarkThemeEnabled = false;
   bool isRewarded = false;
   int rewardedCounter = 0;

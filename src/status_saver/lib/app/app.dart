@@ -95,10 +95,11 @@ class App {
     final String watermarkPath = await _copyAssetToTempDir(
         'assets/images/status_watermark.png', 'status_watermark.png');
 
-    // Add Watermark
+    // Add Watermark with reduced opacity so it is subtle (aa = alpha, 0..1).
+    // Lower `aa` = more transparent. Change here to make it more/less visible.
     await _flutterFFmpeg
         .execute(
-            "-i \"$inputSatusPath\" -i $watermarkPath -filter_complex 'overlay=x=W-w-10:y=H-h-10' -y \"$outputStatusPath\" ")
+            "-i \"$inputSatusPath\" -i $watermarkPath -filter_complex '[1]format=rgba,colorchannelmixer=aa=0.28[wm];[0][wm]overlay=x=W-w-10:y=H-h-10' -y \"$outputStatusPath\" ")
         .then((rc) => print("FFmpeg process exited with rc $rc"));
   }
 

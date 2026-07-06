@@ -29,13 +29,13 @@ class RemoveWatermarkScreen extends StatelessWidget {
             ),
             Divider(),
             // List of subscriptions
-            // StoreProducts(
-            //   subscriptionIDs: REMOVE_WATERMARK_SUB_IDS,
-            //   icon: CircleAvatar(
-            //     backgroundColor: Colors.teal,
-            //     child: Icon(Icons.copyright_rounded, color: Colors.white),
-            //   ),
-            // ),
+            StoreProducts(
+              filterPrefix: 'watermark',
+              icon: CircleAvatar(
+                backgroundColor: Colors.teal,
+                child: Icon(Icons.copyright, color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),
