@@ -54,23 +54,24 @@ class VideosTabState extends State<VideosTab> {
   void initState() {
     super.initState();
 
-    // Get Statuses path
-    _app.getStatusesPath(widget.app).then((path) {
-      // Check statuses dir
-      if (Directory(path).existsSync()) {
-        //print('yes dir exists');
-        if (mounted)
-          setState(() {
-            _videoList = Directory(path)
-                .listSync()
-                .map((item) => item.path)
-                .where((item) => item.endsWith(".mp4"))
-                .toList();
-          });
-      } else {
-        //print('Dir does not exists');
-        if (mounted) setState(() => _videoList = []);
+    // Get all media directories for the selected platform and merge videos.
+    _app.getMediaDirs(widget.app).then((dirs) {
+      final List<String> videos = [];
+      for (final path in dirs) {
+        try {
+          videos.addAll(Directory(path)
+              .listSync()
+              .map((item) => item.path)
+              .where((item) =>
+                  item.endsWith(".mp4") ||
+                  item.endsWith(".mkv") ||
+                  item.endsWith(".mov")));
+        } catch (e) {
+          // Ignore directories we can't read.
+          // print('Could not read dir $path: $e');
+        }
       }
+      if (mounted) setState(() => _videoList = videos);
     });
   }
 

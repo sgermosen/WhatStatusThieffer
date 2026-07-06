@@ -1,10 +1,23 @@
-# Wp Status Taker
- It's an app designed to thieff the Whatsapp Status without need to ask for them, speccially the videos.
- 
+# Social Status Saver
+ It's an app designed to browse and save media from social apps without needing to ask for them, especially the videos.
+
+## Supported platforms
+ The app is now multi-platform. On the start screen you can pick:
+
+ - **WhatsApp** and **WhatsApp Business** – reads the *viewed* statuses that WhatsApp caches in its public `.Statuses` folder.
+ - **Instagram**, **Facebook** and **TikTok** – these apps do **not** expose viewed stories/reels in a public folder, so the app browses the public folders where each app saves the media you download/save from within it (e.g. `Pictures/Instagram`, `DCIM/Facebook`, `DCIM/TikTok`, `Movies/…`, `Download/…`).
+
+ Adding a new platform only requires adding a `MediaPlatform` entry to `SUPPORTED_PLATFORMS` in
+ `src/status_saver/lib/constants/app_constants.dart` – no screen or tab code needs to change. Each entry
+ declares the candidate folders to scan; every folder that exists is scanned and its images/videos are merged.
+
 # Knowed Issues
 
-## Android 11 and 12 is not working: 
-With the privacy updates they change the rules to access to those folders, so now is not working propertly in those platform.
+## Android 11+ scoped storage:
+With the privacy updates the rules to access those folders changed. The app now also scans the newer scoped
+location (`Android/media/com.whatsapp/WhatsApp/Media/.Statuses`) and declares the granular media permissions
+(`READ_MEDIA_IMAGES` / `READ_MEDIA_VIDEO`) for Android 13+, which improves access. On Android 11/12, full access
+to every folder may still require `MANAGE_EXTERNAL_STORAGE` ("All files access"), which is not requested here.
 
 ## Bulk delete is not really deleting well: 
 On saved status if you press for 2 seconds, the bulk delete its enabled, but, apparently it work, it remove it from the screen, but, when you close the app, the deleted status are still there.

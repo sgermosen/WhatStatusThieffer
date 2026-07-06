@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/app_model.dart';
+import 'package:status_saver/models/media_platform.dart';
 import 'package:status_saver/tabs/saved_status_tab.dart';
 import 'package:status_saver/tabs/videos_tab.dart';
 import 'package:status_saver/widgets/my_navigation_drawer.dart';
@@ -14,9 +15,9 @@ import 'package:status_saver/widgets/rewarded_counter.dart';
 
 class HomeScreen extends StatefulWidget {
   // Variables
-  final String app;
+  final MediaPlatform platform;
 
-  HomeScreen({@required this.app});
+  HomeScreen({@required this.platform});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -165,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: MyNavigationDrawer(),
         ),
         appBar: AppBar(
-          title: Text(APP_NAME),
+          title: Text(_i18n.translate(widget.platform.titleKey)),
           actions: [
             // Rewarded minutes counter
             RewardedMinCounter()
@@ -174,10 +175,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: TabBarView(physics: NeverScrollableScrollPhysics(), children: [
           /// Images tab body
-          PhotosTab(app: widget.app),
+          PhotosTab(app: widget.platform.key),
 
           /// Videos tab body
-          VideosTab(app: widget.app),
+          VideosTab(app: widget.platform.key),
 
           /// Saved Status tab body
           SavedStatusTab(),

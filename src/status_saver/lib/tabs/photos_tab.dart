@@ -53,23 +53,25 @@ class _PhotosTabState extends State<PhotosTab> {
   void initState() {
     super.initState();
 
-    // Get Statuses path
-    _app.getStatusesPath(widget.app).then((path) {
-      // Check statuses dir
-      if (Directory(path).existsSync()) {
-        // print('yes dir exists');
-        if (mounted)
-          setState(() {
-            _imageList = Directory(path)
-                .listSync()
-                .map((item) => item.path)
-                .where((item) => item.endsWith(".jpg") || item.endsWith(".gif"))
-                .toList();
-          });
-      } else {
-        // print('Dir does not exists');
-        setState(() => _imageList = []);
+    // Get all media directories for the selected platform and merge images.
+    _app.getMediaDirs(widget.app).then((dirs) {
+      final List<String> images = [];
+      for (final path in dirs) {
+        try {
+          images.addAll(Directory(path)
+              .listSync()
+              .map((item) => item.path)
+              .where((item) =>
+                  item.endsWith(".jpg") ||
+                  item.endsWith(".jpeg") ||
+                  item.endsWith(".png") ||
+                  item.endsWith(".gif")));
+        } catch (e) {
+          // Ignore directories we can't read.
+          // print('Could not read dir $path: $e');
+        }
       }
+      if (mounted) setState(() => _imageList = images);
     });
   }
 
