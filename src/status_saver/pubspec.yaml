@@ -47,6 +47,11 @@ dependencies:
   version: ^2.0.0
   # Used by the "Download from link" feature to fetch pages and media.
   http: ^0.13.6
+  # Receive links shared into the app from other apps (share sheet).
+  # Pinned to the classic text-stream API (getInitialText / getTextStream);
+  # 1.8.x changed the API, so do not widen this range without updating
+  # start_screen.dart accordingly.
+  receive_sharing_intent: 1.4.5
 
 dev_dependencies:
   flutter_test:

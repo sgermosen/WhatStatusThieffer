@@ -27,6 +27,16 @@
 
  To add/repair a platform resolver, implement `PlatformResolver` in `link_downloader.dart`.
 
+### Sharing a link into the app
+ You can also **share** a link straight from Instagram / TikTok / Facebook / a browser (Share → this app) and it
+ opens the "Download from link" screen with the URL prefilled. This uses `receive_sharing_intent` (pinned to
+ `1.4.5`, the classic `getInitialText` / `getTextStream` API) wired in `start_screen.dart`, plus a `text/*`
+ `SEND` intent-filter in `AndroidManifest.xml`.
+
+ - **Android**: works out of the box with the intent-filter above.
+ - **iOS**: receiving shares additionally requires adding a *Share Extension* target in Xcode (not configured
+   here). Without it, iOS builds fine but won't appear in the iOS share sheet.
+
 # Knowed Issues
 
 ## Android 11+ scoped storage:

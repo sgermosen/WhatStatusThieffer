@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:status_saver/app/app.dart';
 import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/media_platform.dart';
 import 'package:status_saver/screens/download_link_screen.dart';
 import 'package:status_saver/screens/home_screen.dart';
 import 'package:status_saver/app/app_localizations.dart';
+import 'package:status_saver/services/link_downloader.dart';
 
 class StartScreen extends StatefulWidget {
   @override
@@ -15,6 +19,9 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
   // Variables
   final App _app = new App();
+
+  /// Subscription to links shared into the app while it is running.
+  StreamSubscription _intentSub;
 
   void _initializations() async {
     // Init Admob app
@@ -27,6 +34,44 @@ class _StartScreenState extends State<StartScreen> {
 
     /// Initializations
     _initializations();
+
+    /// Listen for links shared into the app
+    _initShareIntent();
+  }
+
+  @override
+  void dispose() {
+    if (_intentSub != null) _intentSub.cancel();
+    super.dispose();
+  }
+
+  /// Handle links shared into the app from the system share sheet.
+  void _initShareIntent() {
+    // App already running and a link is shared into it.
+    _intentSub = ReceiveSharingIntent.getTextStream().listen(
+      (String value) => _openSharedLink(value),
+      onError: (dynamic err) {
+        // Ignore share-intent errors.
+      },
+    );
+
+    // App launched from a shared link (cold start).
+    ReceiveSharingIntent.getInitialText().then((String value) {
+      _openSharedLink(value);
+      // Avoid re-processing the same intent on rebuilds.
+      ReceiveSharingIntent.reset();
+    });
+  }
+
+  /// Open the download screen prefilled with the shared link (if it is one).
+  void _openSharedLink(String value) {
+    if (value == null) return;
+    if (extractUrl(value) == null) return;
+    Future(() {
+      if (!mounted) return;
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => DownloadLinkScreen(initialUrl: value)));
+    });
   }
 
   @override
