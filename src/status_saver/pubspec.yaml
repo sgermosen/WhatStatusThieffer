@@ -11,8 +11,13 @@ description: Wp Status Taker
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.4+4
+version: 1.0.8+8
 
+# NOTE: the lower bound stays at 2.1.0 on purpose: it keeps this package's own
+# libraries on a pre-null-safety language version so the existing code compiles
+# unchanged. Build with Flutter 3.7.x (Dart 2.19) — the last SDK that runs
+# unsound null safety. Moving to Flutter 3.10+/Dart 3 requires migrating the app
+# to sound null safety first.
 environment:
   sdk: ">=2.1.0 <3.0.0"
 

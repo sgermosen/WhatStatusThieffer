@@ -497,16 +497,41 @@ el widget de `createBanner()` en el `Scaffold` de `home_screen.dart`.
 
 ## 7. Firma, compilación y subida (paso a paso)
 
-### 7.1 Subir targetSdk (requisito para publicar hoy)
-En `android/app/build.gradle`:
-```gradle
-compileSdkVersion 34
-targetSdkVersion 34   // Google exige 34+ (Android 14) en 2024/2025
-```
-Prueba bien tras subirlo: en Android 13+ los permisos de almacenamiento cambian
-(esta rama ya declara `READ_MEDIA_IMAGES`/`READ_MEDIA_VIDEO`). Para acceso amplio
-a carpetas de otras apps quizá necesites `MANAGE_EXTERNAL_STORAGE` (requiere
-justificación en Play — ver §8).
+### 7.1 Entorno de build y targetSdk (✅ ya configurado en el repo)
+
+Google exige **targetSdk 34+** (Android 14) para publicar/actualizar. Ya está
+subido, junto con la cadena de herramientas necesaria:
+
+| Componente | Antes | Ahora |
+|-----------|-------|-------|
+| `compileSdkVersion` / `targetSdkVersion` | 31 / 30 | **34 / 34** |
+| `versionCode` / `versionName` | 7 / 1.0.7 | **8 / 1.0.8** |
+| Android Gradle Plugin | 4.1.0 | **7.4.2** |
+| Gradle wrapper | 6.7.1 | **7.6.3** |
+| Kotlin | 1.6.10 | **1.8.10** |
+| Repos | `jcenter()` (muerto) | **`mavenCentral()`** |
+| Firebase (google-services) | aplicado | **removido** (ya no se usa) |
+
+> ⚠️ **Versión de Flutter — importante.** El código de la app **no está migrado a
+> null safety**. Dart 3 (Flutter 3.10+) ya **no ejecuta** código sin null safety.
+> Por eso, para compilar tal cual, usa **Flutter 3.7.x (Dart 2.19)**, la última
+> versión que corre "unsound null safety". La cadena AGP 7.4.2 / Gradle 7.6.3 /
+> Kotlin 1.8.10 es compatible con Flutter 3.7 y compila contra SDK 34.
+>
+> Si quieres usar un Flutter más nuevo (Dart 3), primero hay que **migrar la app
+> a sound null safety** (tarea aparte, ~25 archivos).
+
+**Riesgos de dependencias antiguas a vigilar al compilar** (no se pudieron probar
+sin SDK de Flutter en el entorno):
+- `flutter_ffmpeg: ^0.4.0` está **descontinuado** y puede fallar a compilar con
+  AGP 7 / SDK 34. Si da problemas, migra a `ffmpeg_kit_flutter_min_gpl` o elimina
+  la función de marca de agua por video. Solo se usa para la marca de agua.
+- `share: ^2.0.4` está descontinuado; considera migrar a `share_plus`.
+
+Requisitos de almacenamiento: en Android 13+ los permisos cambian (esta rama ya
+declara `READ_MEDIA_IMAGES`/`READ_MEDIA_VIDEO`). Para acceso amplio a carpetas de
+otras apps quizá necesites `MANAGE_EXTERNAL_STORAGE` (requiere justificación en
+Play — ver §8).
 
 ### 7.2 Crear el keystore (una sola vez)
 ```bash
