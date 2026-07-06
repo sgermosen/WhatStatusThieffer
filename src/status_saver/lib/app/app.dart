@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:status_saver/app/app_localizations.dart';
 import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/app_model.dart';
+import 'package:status_saver/models/media_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -218,16 +219,40 @@ class App {
     }
   }
 
-  //Todo: The objective of this feature was than you can share directly from
-  //whatsapp without need to use my app, but for some reason whatsapp dont like that, so, I guess than this is a stupid feature
-  /// Get WhatsApp Statuses path
-  Future<String> getStatusesPath(String app) async {
+  /// Get the external storage root path (e.g. `/storage/emulated/0/`).
+  Future<String> _getExternalRoot() async {
     final Directory absoluteDir = await getExternalStorageDirectory();
-    final String externalDirPath = absoluteDir.path
+    return absoluteDir.path
         .replaceFirst('Android/data/$APP_PACKAGE_NAME/files', '');
-    final statusesPath = "$externalDirPath/$app/Media/.Statuses";
-    // print('getStatusesPath() -> $statusesPath');
-    return statusesPath;
+  }
+
+  /// Get all existing media directories for the given platform [key].
+  ///
+  /// Each platform declares several candidate folders (see
+  /// `SUPPORTED_PLATFORMS`); this returns only the ones that actually exist on
+  /// the device so the tabs can scan and merge their contents.
+  Future<List<String>> getMediaDirs(String key) async {
+    final String root = await _getExternalRoot();
+
+    // Find the platform config by key.
+    MediaPlatform platform;
+    for (final p in SUPPORTED_PLATFORMS) {
+      if (p.key == key) {
+        platform = p;
+        break;
+      }
+    }
+    if (platform == null) return <String>[];
+
+    final List<String> dirs = [];
+    for (final rel in platform.mediaDirs) {
+      final String full = "$root$rel";
+      if (Directory(full).existsSync()) {
+        dirs.add(full);
+      }
+    }
+    // print('getMediaDirs($key) -> $dirs');
+    return dirs;
   }
 
   /// Get Saved Statuses path

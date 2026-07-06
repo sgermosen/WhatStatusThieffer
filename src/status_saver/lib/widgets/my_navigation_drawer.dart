@@ -5,6 +5,7 @@ import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/app_model.dart';
 import 'package:status_saver/screens/about_us_screen.dart';
 import 'package:status_saver/screens/app_settings_screen.dart';
+import 'package:status_saver/screens/download_link_screen.dart';
 import 'package:status_saver/screens/guide_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:status_saver/screens/remove_ads_screen.dart';
@@ -29,6 +30,21 @@ class MyNavigationDrawer extends StatelessWidget {
       children: <Widget>[
         /// DrawerHeader
         _drawerHeader(context),
+
+        ListTile(
+          leading: Icon(Icons.link, color: Colors.teal),
+          title:
+              Text(i18n.translate('download_from_link'), style: _menutextcolor),
+          trailing: Icon(Icons.arrow_forward),
+          onTap: () {
+            // Go to download from link screen
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => DownloadLinkScreen()));
+          },
+        ),
+        Divider(thickness: 1),
 
         /// *** New features *** ///
         // ListTile(

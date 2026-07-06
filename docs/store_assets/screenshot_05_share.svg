@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" font-family="Segoe UI, Roboto, Arial, sans-serif">
+  <rect width="1080" height="1920" fill="#e0f2f1"/>
+  <rect width="1080" height="230" fill="#00695c"/>
+  <text x="540" y="120" fill="#ffffff" font-size="56" font-weight="700" text-anchor="middle">Comparte y guarda</text>
+  <text x="540" y="195" fill="#b2dfdb" font-size="48" font-weight="500" text-anchor="middle">sin salir de tus apps</text>
+
+  <rect x="140" y="290" width="800" height="1560" rx="48" fill="#263238"/>
+  <!-- simulated social video background -->
+  <text x="540" y="640" font-size="120" text-anchor="middle">🎬</text>
+  <text x="540" y="760" fill="#eceff1" font-size="36" text-anchor="middle">Reel / Video que te gustó</text>
+
+  <!-- share sheet -->
+  <rect x="140" y="1000" width="800" height="850" rx="40" fill="#ffffff"/>
+  <rect x="480" y="1030" width="120" height="10" rx="5" fill="#cfd8dc"/>
+  <text x="200" y="1110" fill="#37474f" font-size="36" font-weight="700">Compartir</text>
+
+  <!-- app targets row -->
+  <g>
+    <circle cx="270" cy="1250" r="60" fill="#eceff1"/>
+    <text x="270" y="1265" font-size="50" text-anchor="middle">💬</text>
+    <text x="270" y="1360" fill="#607d8b" font-size="26" text-anchor="middle">Mensajes</text>
+  </g>
+  <g>
+    <circle cx="440" cy="1250" r="60" fill="#eceff1"/>
+    <text x="440" y="1265" font-size="50" text-anchor="middle">✉️</text>
+    <text x="440" y="1360" fill="#607d8b" font-size="26" text-anchor="middle">Correo</text>
+  </g>
+  <!-- highlighted target: our app -->
+  <g>
+    <circle cx="610" cy="1250" r="66" fill="#009688" stroke="#004d40" stroke-width="6"/>
+    <text x="610" y="1268" fill="#ffffff" font-size="56" font-weight="700" text-anchor="middle">S</text>
+    <text x="610" y="1360" fill="#00695c" font-size="26" font-weight="700" text-anchor="middle">Status Saver</text>
+  </g>
+  <g>
+    <circle cx="780" cy="1250" r="60" fill="#eceff1"/>
+    <text x="780" y="1265" font-size="50" text-anchor="middle">📋</text>
+    <text x="780" y="1360" fill="#607d8b" font-size="26" text-anchor="middle">Copiar</text>
+  </g>
+
+  <!-- arrow / callout -->
+  <text x="610" y="1500" fill="#00695c" font-size="34" font-weight="700" text-anchor="middle">Toca Social Status Saver</text>
+  <text x="610" y="1550" fill="#455a64" font-size="30" text-anchor="middle">y el link se descarga solo</text>
+  <text x="610" y="1660" font-size="70" text-anchor="middle">⬇️</text>
+</svg>

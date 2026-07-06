@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" font-family="Segoe UI, Roboto, Arial, sans-serif">
+  <rect width="1080" height="1920" fill="#e0f2f1"/>
+  <rect width="1080" height="230" fill="#00695c"/>
+  <text x="540" y="120" fill="#ffffff" font-size="60" font-weight="700" text-anchor="middle">Tus descargas</text>
+  <text x="540" y="195" fill="#b2dfdb" font-size="50" font-weight="500" text-anchor="middle">siempre a la mano</text>
+
+  <rect x="140" y="290" width="800" height="1560" rx="48" fill="#ffffff" stroke="#b0bec5" stroke-width="4"/>
+  <rect x="140" y="290" width="800" height="120" rx="48" fill="#009688"/>
+  <rect x="140" y="360" width="800" height="50" fill="#009688"/>
+  <text x="200" y="368" fill="#ffffff" font-size="40" font-weight="700">Social Status Saver</text>
+  <rect x="140" y="410" width="800" height="80" fill="#00897b"/>
+  <text x="270" y="462" fill="#b2dfdb" font-size="32" text-anchor="middle">IMÁGENES</text>
+  <text x="540" y="462" fill="#b2dfdb" font-size="32" text-anchor="middle">VIDEOS</text>
+  <text x="810" y="462" fill="#ffffff" font-size="32" font-weight="700" text-anchor="middle">GUARDADOS</text>
+  <rect x="720" y="480" width="180" height="6" fill="#ffffff"/>
+
+  <!-- saved grid with share/delete actions -->
+  <g>
+    <rect x="180" y="530" width="340" height="440" rx="14" fill="#cfd8dc"/>
+    <circle cx="350" cy="720" r="55" fill="#eceff1"/>
+    <polygon points="330,690 330,750 385,720" fill="#90a4ae"/>
+    <circle cx="230" cy="920" r="34" fill="#009688"/>
+    <text x="230" y="932" fill="#fff" font-size="34" text-anchor="middle">↗</text>
+    <circle cx="470" cy="920" r="34" fill="#e53935"/>
+    <text x="470" y="932" fill="#fff" font-size="34" text-anchor="middle">🗑</text>
+  </g>
+  <g>
+    <rect x="560" y="530" width="340" height="440" rx="14" fill="#b2dfdb"/>
+    <circle cx="610" cy="920" r="34" fill="#009688"/>
+    <text x="610" y="932" fill="#fff" font-size="34" text-anchor="middle">↗</text>
+    <circle cx="850" cy="920" r="34" fill="#e53935"/>
+    <text x="850" y="932" fill="#fff" font-size="34" text-anchor="middle">🗑</text>
+  </g>
+  <g>
+    <rect x="180" y="990" width="340" height="440" rx="14" fill="#b2dfdb"/>
+    <circle cx="230" cy="1380" r="34" fill="#009688"/>
+    <text x="230" y="1392" fill="#fff" font-size="34" text-anchor="middle">↗</text>
+    <circle cx="470" cy="1380" r="34" fill="#e53935"/>
+    <text x="470" y="1392" fill="#fff" font-size="34" text-anchor="middle">🗑</text>
+  </g>
+  <g>
+    <rect x="560" y="990" width="340" height="440" rx="14" fill="#cfd8dc"/>
+    <circle cx="730" cy="1180" r="55" fill="#eceff1"/>
+    <polygon points="710,1150 710,1210 765,1180" fill="#90a4ae"/>
+    <circle cx="610" cy="1380" r="34" fill="#009688"/>
+    <text x="610" y="1392" fill="#fff" font-size="34" text-anchor="middle">↗</text>
+    <circle cx="850" cy="1380" r="34" fill="#e53935"/>
+    <text x="850" y="1392" fill="#fff" font-size="34" text-anchor="middle">🗑</text>
+  </g>
+  <g>
+    <rect x="180" y="1450" width="340" height="360" rx="14" fill="#cfd8dc"/>
+  </g>
+  <g>
+    <rect x="560" y="1450" width="340" height="360" rx="14" fill="#b2dfdb"/>
+  </g>
+</svg>

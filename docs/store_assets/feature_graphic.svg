@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500" font-family="Segoe UI, Roboto, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#009688"/>
+      <stop offset="1" stop-color="#004d40"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="500" fill="url(#bg)"/>
+
+  <!-- decorative circles -->
+  <circle cx="900" cy="60" r="160" fill="#ffffff" opacity="0.06"/>
+  <circle cx="120" cy="440" r="180" fill="#ffffff" opacity="0.06"/>
+
+  <!-- logo -->
+  <circle cx="150" cy="250" r="90" fill="#ffffff"/>
+  <text x="150" y="285" fill="#009688" font-size="100" font-weight="700" text-anchor="middle">S</text>
+
+  <!-- title -->
+  <text x="290" y="200" fill="#ffffff" font-size="72" font-weight="700">Social Status Saver</text>
+  <text x="290" y="270" fill="#b2dfdb" font-size="40" font-weight="500">Guarda y descarga fotos y videos</text>
+
+  <!-- platform badges -->
+  <g font-size="26" font-weight="700" text-anchor="middle">
+    <rect x="290" y="320" width="150" height="60" rx="30" fill="#ffffff" opacity="0.15"/>
+    <text x="365" y="358" fill="#ffffff">WhatsApp</text>
+    <rect x="455" y="320" width="150" height="60" rx="30" fill="#ffffff" opacity="0.15"/>
+    <text x="530" y="358" fill="#ffffff">Instagram</text>
+    <rect x="620" y="320" width="140" height="60" rx="30" fill="#ffffff" opacity="0.15"/>
+    <text x="690" y="358" fill="#ffffff">Facebook</text>
+    <rect x="775" y="320" width="120" height="60" rx="30" fill="#ffffff" opacity="0.15"/>
+    <text x="835" y="358" fill="#ffffff">TikTok</text>
+  </g>
+
+  <!-- link chip -->
+  <rect x="290" y="400" width="330" height="60" rx="30" fill="#ffffff"/>
+  <text x="455" y="440" fill="#00695c" font-size="28" font-weight="700" text-anchor="middle">🔗 Descarga por enlace</text>
+</svg>

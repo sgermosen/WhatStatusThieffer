@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" font-family="Segoe UI, Roboto, Arial, sans-serif">
+  <rect width="1080" height="1920" fill="#e0f2f1"/>
+  <!-- Marketing band -->
+  <rect width="1080" height="230" fill="#00695c"/>
+  <text x="540" y="120" fill="#ffffff" font-size="64" font-weight="700" text-anchor="middle">Todas tus redes</text>
+  <text x="540" y="195" fill="#b2dfdb" font-size="50" font-weight="500" text-anchor="middle">en un solo lugar</text>
+
+  <!-- Phone frame -->
+  <rect x="140" y="290" width="800" height="1560" rx="48" fill="#ffffff" stroke="#b0bec5" stroke-width="4"/>
+  <!-- App bar -->
+  <rect x="140" y="290" width="800" height="120" rx="48" fill="#009688"/>
+  <rect x="140" y="360" width="800" height="50" fill="#009688"/>
+  <text x="200" y="368" fill="#ffffff" font-size="42" font-weight="700">Social Status Saver</text>
+
+  <!-- logo circle -->
+  <circle cx="540" cy="510" r="70" fill="#009688"/>
+  <text x="540" y="530" fill="#ffffff" font-size="60" font-weight="700" text-anchor="middle">S</text>
+  <text x="540" y="640" fill="#455a64" font-size="34" text-anchor="middle">Selecciona una app para ver los estados</text>
+
+  <!-- Platform cards -->
+  <g>
+    <rect x="200" y="700" width="680" height="120" rx="16" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+    <circle cx="270" cy="760" r="38" fill="#25D366"/>
+    <text x="270" y="775" fill="#fff" font-size="40" text-anchor="middle">✓</text>
+    <text x="340" y="750" fill="#00796b" font-size="38" font-weight="700">WhatsApp</text>
+    <text x="340" y="795" fill="#90a4ae" font-size="28">Clic aquí para abrir</text>
+  </g>
+  <g>
+    <rect x="200" y="840" width="680" height="120" rx="16" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+    <circle cx="270" cy="900" r="38" fill="#075E54"/>
+    <text x="340" y="890" fill="#00796b" font-size="38" font-weight="700">WhatsApp Business</text>
+    <text x="340" y="935" fill="#90a4ae" font-size="28">Clic aquí para abrir</text>
+  </g>
+  <g>
+    <rect x="200" y="980" width="680" height="120" rx="16" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+    <circle cx="270" cy="1040" r="38" fill="#E1306C"/>
+    <text x="340" y="1030" fill="#00796b" font-size="38" font-weight="700">Instagram</text>
+    <text x="340" y="1075" fill="#90a4ae" font-size="28">Clic aquí para abrir</text>
+  </g>
+  <g>
+    <rect x="200" y="1120" width="680" height="120" rx="16" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+    <circle cx="270" cy="1180" r="38" fill="#1877F2"/>
+    <text x="340" y="1170" fill="#00796b" font-size="38" font-weight="700">Facebook</text>
+    <text x="340" y="1215" fill="#90a4ae" font-size="28">Clic aquí para abrir</text>
+  </g>
+  <g>
+    <rect x="200" y="1260" width="680" height="120" rx="16" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+    <circle cx="270" cy="1320" r="38" fill="#010101"/>
+    <text x="340" y="1310" fill="#00796b" font-size="38" font-weight="700">TikTok</text>
+    <text x="340" y="1355" fill="#90a4ae" font-size="28">Clic aquí para abrir</text>
+  </g>
+  <!-- Download from link highlighted -->
+  <g>
+    <rect x="200" y="1400" width="680" height="120" rx="16" fill="#009688"/>
+    <circle cx="270" cy="1460" r="38" fill="#ffffff"/>
+    <text x="270" y="1475" fill="#009688" font-size="40" text-anchor="middle">🔗</text>
+    <text x="340" y="1450" fill="#ffffff" font-size="38" font-weight="700">Descargar desde un enlace</text>
+    <text x="340" y="1495" fill="#b2dfdb" font-size="28">Pega un enlace para descargar</text>
+  </g>
+</svg>
