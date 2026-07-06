@@ -72,6 +72,20 @@
   "view_media_of_facebook": "View Facebook Media",
   "view_media_of_tiktok": "View TikTok Media",
 
+  "_download_link_screen": "*** Download from Link Screen ***",
+  "download_from_link": "Download from a link",
+  "paste_a_link_to_download": "Paste a link to download its photo or video",
+  "paste_link_here": "Paste the link here...",
+  "paste": "Paste",
+  "detected_platform": "Detected",
+  "download": "Download",
+  "downloading": "Downloading...",
+  "download_completed": "Download completed! Check the SAVED tab.",
+  "download_failed": "Download failed. The link may be private or the platform changed. Please try another link.",
+  "invalid_link": "That doesn't look like a valid link.",
+  "unsupported_or_private_link": "Couldn't find media in that link. It may be private, or need login (common on Instagram).",
+  "link_download_disclaimer": "Only download content you own or have permission to use. Works best with public TikTok/Facebook videos; Instagram often requires login. Public links only.",
+
 
   "_app_messages": "*** App Messages Translations ***",
   "Reminder": "Reminder", 

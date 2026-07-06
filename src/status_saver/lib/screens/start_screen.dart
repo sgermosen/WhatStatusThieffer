@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:status_saver/app/app.dart';
 import 'package:status_saver/constants/app_constants.dart';
 import 'package:status_saver/models/media_platform.dart';
+import 'package:status_saver/screens/download_link_screen.dart';
 import 'package:status_saver/screens/home_screen.dart';
 import 'package:status_saver/app/app_localizations.dart';
 
@@ -48,6 +49,9 @@ class _StartScreenState extends State<StartScreen> {
     for (final platform in SUPPORTED_PLATFORMS) {
       children.add(_buildPlatformCard(platform));
     }
+
+    // Download-from-link entry point.
+    children.add(_buildDownloadLinkCard(i18n));
     children.add(SizedBox(height: 50));
 
     return Scaffold(
@@ -87,6 +91,36 @@ class _StartScreenState extends State<StartScreen> {
           ),
         ),
         onTap: () => _goToHomeScreen(platform),
+      ),
+    );
+  }
+
+  /// Card that opens the "Download from link" screen.
+  Widget _buildDownloadLinkCard(AppLocalizations i18n) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5, bottom: 15),
+      child: GestureDetector(
+        child: Card(
+          color: Colors.teal,
+          child: ListTile(
+            leading: Icon(Icons.link, color: Colors.white, size: 38),
+            title: Text(
+              i18n.translate('download_from_link'),
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              i18n.translate('paste_a_link_to_download'),
+              style: TextStyle(color: Colors.white70),
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DownloadLinkScreen()));
+        },
       ),
     );
   }

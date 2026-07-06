@@ -45,6 +45,8 @@ dependencies:
   fluttertoast: ^8.0.7
   file_picker: ^3.0.3
   version: ^2.0.0
+  # Used by the "Download from link" feature to fetch pages and media.
+  http: ^0.13.6
 
 dev_dependencies:
   flutter_test:

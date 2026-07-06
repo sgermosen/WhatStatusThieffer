@@ -73,6 +73,20 @@
     "view_media_of_instagram": "Visualizar mídia do Instagram",
     "view_media_of_facebook": "Visualizar mídia do Facebook",
     "view_media_of_tiktok": "Visualizar mídia do TikTok",
+
+    "_download_link_screen": "*** Tela de Download por Link ***",
+    "download_from_link": "Baixar de um link",
+    "paste_a_link_to_download": "Cole um link para baixar sua foto ou vídeo",
+    "paste_link_here": "Cole o link aqui...",
+    "paste": "Colar",
+    "detected_platform": "Detectado",
+    "download": "Baixar",
+    "downloading": "Baixando...",
+    "download_completed": "Download concluído! Veja na aba SALVOS.",
+    "download_failed": "Falha no download. O link pode ser privado ou a plataforma mudou. Tente outro link.",
+    "invalid_link": "Isso não parece um link válido.",
+    "unsupported_or_private_link": "Não foi possível encontrar mídia nesse link. Pode ser privado ou exigir login (comum no Instagram).",
+    "link_download_disclaimer": "Baixe apenas conteúdo seu ou com permissão. Funciona melhor com vídeos públicos do TikTok/Facebook; o Instagram geralmente exige login. Apenas links públicos.",
   
   
     "_app_messages": "*** App Messages Translations ***",

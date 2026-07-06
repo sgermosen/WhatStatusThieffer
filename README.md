@@ -11,6 +11,22 @@
  `src/status_saver/lib/constants/app_constants.dart` – no screen or tab code needs to change. Each entry
  declares the candidate folders to scan; every folder that exists is scanned and its images/videos are merged.
 
+## Download from a link
+ Besides browsing folders, the app can download media directly from a **shared link** (Start screen →
+ "Download from a link", also in the side menu). You paste a link and it resolves the direct photo/video and
+ saves it to the SAVED tab.
+
+ Resolution happens **entirely on the device, no server** (`lib/services/link_downloader.dart`): a per-platform
+ resolver scrapes the public page, with a generic Open Graph (`og:video` / `og:image`) fallback.
+
+ - **TikTok / Facebook** public videos: usually work.
+ - **Instagram**: limited – most content now needs a logged-in session, so it often only works for public posts.
+ - Because it scrapes public pages, it is **fragile**: expect the per-platform resolvers to need updates when the
+   platforms change their markup. It is also each user's responsibility to only download content they own or have
+   permission to use, and to respect each platform's Terms of Service.
+
+ To add/repair a platform resolver, implement `PlatformResolver` in `link_downloader.dart`.
+
 # Knowed Issues
 
 ## Android 11+ scoped storage:

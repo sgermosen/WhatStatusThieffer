@@ -72,6 +72,20 @@
   "view_media_of_facebook": "Contenido de Facebook",
   "view_media_of_tiktok": "Contenido de TikTok",
 
+  "_download_link_screen": "*** Pantalla de Descarga por Enlace ***",
+  "download_from_link": "Descargar desde un enlace",
+  "paste_a_link_to_download": "Pega un enlace para descargar su foto o video",
+  "paste_link_here": "Pega el enlace aquí...",
+  "paste": "Pegar",
+  "detected_platform": "Detectado",
+  "download": "Descargar",
+  "downloading": "Descargando...",
+  "download_completed": "¡Descarga completada! Míralo en la pestaña GUARDADOS.",
+  "download_failed": "Falló la descarga. El enlace puede ser privado o la plataforma cambió. Intenta con otro enlace.",
+  "invalid_link": "Eso no parece un enlace válido.",
+  "unsupported_or_private_link": "No se encontró contenido en ese enlace. Puede ser privado o requerir inicio de sesión (común en Instagram).",
+  "link_download_disclaimer": "Descarga solo contenido tuyo o con permiso. Funciona mejor con videos públicos de TikTok/Facebook; Instagram suele requerir inicio de sesión. Solo enlaces públicos.",
+
 
   "_app_messages": "*** Traduccion de los Mensajes del App ***",
   "Reminder": "Recordatorio", 
