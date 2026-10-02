@@ -1,0 +1,14 @@
+# Copy this file to android/key.properties and fill in your values.
+# key.properties and the keystore are gitignored - NEVER commit them.
+#
+# Generate the keystore once (keep it AND the passwords backed up safely:
+# if you lose them you can't update the app unless Play App Signing is on):
+#
+#   keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA \
+#     -keysize 2048 -validity 10000 -alias upload
+#
+# storeFile is relative to android/app/ (or use an absolute path).
+storePassword=CHANGE_ME
+keyPassword=CHANGE_ME
+keyAlias=upload
+storeFile=upload-keystore.jks

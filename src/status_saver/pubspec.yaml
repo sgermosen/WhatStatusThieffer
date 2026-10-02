@@ -11,7 +11,7 @@ description: Wp Status Taker
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.4+4
+version: 1.0.8+8
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -34,13 +34,13 @@ dependencies:
   url_launcher: ^6.0.7
   permission_handler: ^8.1.1
   flutter_launcher_icons: ^0.9.0
-  share: ^2.0.4
+  # share (discontinued) -> share_plus, same Share.shareFiles/Share.share API.
+  share_plus: ^4.5.3
   font_awesome_flutter: ^9.1.0
   # New Feature Packages
   shared_preferences: ^2.0.6
   #in_app_purchase: ^1.0.6
   scoped_model: ^1.1.0
-  flutter_ffmpeg: ^0.4.0
   #flutter_local_notifications: ^6.0.0
   fluttertoast: ^8.0.7
   file_picker: ^3.0.3

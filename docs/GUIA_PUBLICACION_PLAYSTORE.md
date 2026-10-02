@@ -11,11 +11,11 @@
 |------|-------|
 | Nombre visible actual | `Social Status Saver` (constante `APP_NAME`) |
 | Application ID (package) | `com.xamarindo.wpstatusaver` |
-| versionCode actual | `7` |
-| versionName actual | `1.0.7` |
+| versionCode / versionName | `8` / `1.0.8` — se toman de `version:` en `pubspec.yaml` |
 | minSdkVersion | `21` (Android 5.0) |
-| targetSdkVersion | `30` *(subir a 34+ es obligatorio para publicar hoy — ver §7)* |
-| compileSdkVersion | `31` |
+| targetSdkVersion / compileSdkVersion | `34` / `34` *(ver §7.1 sobre el requisito actual de Google)* |
+| Toolchain Android | AGP 7.4.2 · Gradle 7.6.4 · Kotlin 1.8.22 · `mavenCentral` (JDK 11 o 17) |
+| Flutter objetivo | **3.7.x** (el código aún no es null-safe; Flutter con Dart 3 no lo compila) |
 | AdMob App ID | `ca-app-pub-8521044456540023~3652646925` |
 | Firma release | vía `android/key.properties` + `signingConfigs.release` |
 
@@ -486,13 +486,18 @@ el widget de `createBanner()` en el `Scaffold` de `home_screen.dart`.
 
 ## 7. Firma, compilación y subida (paso a paso)
 
-### 7.1 Subir targetSdk (requisito para publicar hoy)
-En `android/app/build.gradle`:
-```gradle
-compileSdkVersion 34
-targetSdkVersion 34   // Google exige 34+ (Android 14) en 2024/2025
-```
-Prueba bien tras subirlo: en Android 13+ los permisos de almacenamiento cambian
+### 7.1 targetSdk (ya en 34)
+`android/app/build.gradle` ya tiene `compileSdkVersion 34` / `targetSdkVersion 34`
+y `android:exported="true"` en `MainActivity` (obligatorio desde API 31).
+
+> ⚠️ **Requisito vigente de Google:** desde el 31-ago-2025 Play exige
+> `targetSdk 35` para apps nuevas y actualizaciones (y cada año sube uno).
+> Llegar a 35+ requiere AGP 8 + Gradle 8 + JDK 17 + Flutter moderno, lo que a su
+> vez exige migrar el código a null safety. Con 34 puedes compilar y probar hoy;
+> para **subir a Play** muy probablemente necesites ese salto. Confírmalo en
+> Play Console → *Política → Nivel de API objetivo*.
+
+Prueba bien en un dispositivo real: en Android 13+ los permisos de almacenamiento cambian
 (esta rama ya declara `READ_MEDIA_IMAGES`/`READ_MEDIA_VIDEO`). Para acceso amplio
 a carpetas de otras apps quizá necesites `MANAGE_EXTERNAL_STORAGE` (requiere
 justificación en Play — ver §8).
@@ -512,10 +517,15 @@ keyPassword=TU_PASSWORD
 keyAlias=upload
 storeFile=/ruta/absoluta/social-status-saver.jks
 ```
-> 🔒 **Seguridad:** `key.properties` y el `.jks` **no deben subirse a Git**.
-> Añádelos a `.gitignore`. (El repo tiene hoy un `key.properties` versionado:
-> cámbialo por credenciales reales locales y sácalo del control de versiones.)
-> El `build.gradle` ya está preparado para leer este archivo. ✔️
+> 🔒 **Seguridad:** `key.properties`, `*.jks` y `*.keystore` ya están en
+> `android/.gitignore` y `key.properties` se sacó del control de versiones
+> (sigue en tu disco). Plantilla: `android/key.properties.example`.
+> **Ojo:** sus contraseñas siguieron en el historial de Git desde 2021. Si el
+> repo es o fue público, trátalas como comprometidas: usa **Play App Signing**
+> (Google guarda la clave de firma real) y una *upload key* nueva.
+>
+> Si no existe `key.properties`, el build release firma con la clave debug
+> (sirve para probar, **no** para subir a Play).
 
 ### 7.4 Compilar el App Bundle (formato que exige Play)
 ```bash
@@ -525,7 +535,7 @@ flutter pub get
 flutter build appbundle --release
 # Resultado: build/app/outputs/bundle/release/app-release.aab
 ```
-Para subir versiones nuevas, incrementa `versionCode` (8, 9, …) y `versionName`.
+Para subir versiones nuevas, incrementa `version:` en `pubspec.yaml` (p.ej. `1.0.9+9`).
 
 ### 7.5 Subir a Play Console
 1. **Crear app** en Play Console (nombre, idioma, tipo *App*, gratis).

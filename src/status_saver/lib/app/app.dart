@@ -1,23 +1,17 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-//import 'package:firebase_admob/firebase_admob.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:status_saver/app/app_localizations.dart';
 import 'package:status_saver/constants/app_constants.dart';
-import 'package:status_saver/models/app_model.dart';
 import 'package:status_saver/models/media_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class App {
-  final FlutterFFmpeg _flutterFFmpeg = new FlutterFFmpeg();
   final String _savedStatusDirKey = 'saved_status_dir';
   final String _autoPlayVideoKey = 'auto_play_video';
   final String _darkThemeKey = 'dark_theme';
@@ -65,73 +59,11 @@ class App {
     await _prefs.setBool(_darkThemeKey, newValue);
   }
 
-  //Todo: Here is an error with the output, because this need to be deleted when the conversion it's done
-  /// Copy Asset to Temporary Directory
-  /// to be used for watermark
-  Future<String> _copyAssetToTempDir(String assetName, String fileName) async {
-    // Load asset from app assets
-    final ByteData assetByteData = await rootBundle.load(assetName);
-
-    // Get byteList from asset
-    final List<int> byteList = assetByteData.buffer
-        .asUint8List(assetByteData.offsetInBytes, assetByteData.lengthInBytes);
-
-    // Get Temporary Directory
-    final Directory tempDir = await getTemporaryDirectory();
-
-    // Returns the absolute file path from temp dir
-
-    return (await File('${tempDir.path}/$fileName')
-            .writeAsBytes(byteList, mode: FileMode.writeOnly, flush: true))
-        .path;
-  }
-
-  /// Add Watermark logo to Video/Image Status
-  /// Returns the output status directory path
-  Future<void> addWatermark(
-      {@required String inputSatusPath,
-      @required String outputStatusPath}) async {
-    // Get Watermark logo
-    final String watermarkPath = await _copyAssetToTempDir(
-        'assets/images/status_watermark.png', 'status_watermark.png');
-
-    // Add Watermark
-    await _flutterFFmpeg
-        .execute(
-            "-i \"$inputSatusPath\" -i $watermarkPath -filter_complex 'overlay=x=W-w-10:y=H-h-10' -y \"$outputStatusPath\" ")
-        .then((rc) => print("FFmpeg process exited with rc $rc"));
-  }
-
-  //Todo: Really I think than this is an stupid functionality if the watermark it's active
-  /// Share not saved Status and add Watermark
+  /// Share a status that has not been saved yet.
+  /// (The watermark feature was disabled and its ffmpeg dependency removed.)
   Future<void> shareNotSavedStatus(
       String statusPath, BuildContext context) async {
-    // Get temporary directory to store the watermarked status to be shared
-    final String tempDir = (await getTemporaryDirectory()).path;
-
-    // Status path
-    String outputStatusPath = statusPath;
-
-    // Show processing dialog
-    processingDialog(context);
-
-    /// Check Active Remove-Ads Subscription to Watermark the Status
-    ///
-    if (AppModel().addWatermark && !AppModel().isRewarded) {
-      // Remane the status
-      outputStatusPath =
-          "$tempDir/DOWNLOAD-ON-PLAYSTORE-${statusPath.split('/').last}";
-      // Add watermark
-      await addWatermark(
-          inputSatusPath: statusPath, outputStatusPath: outputStatusPath);
-    }
-
-    // Close pr dialog
-    Navigator.of(context).pop();
-
-    // Share the watermarked status
-    Share.shareFiles([outputStatusPath]);
-    //print(outputStatusPath);
+    Share.shareFiles([statusPath]);
   }
 
   /// Return App Logo
@@ -303,15 +235,8 @@ class App {
     final String outputStatusPath =
         "$statusDir/Status-${DateTime.now().millisecondsSinceEpoch.toString()}.$fileExt";
 
-    /// Check User Active Remove-Watermark Subscription
-    if (AppModel().addWatermark && !AppModel().isRewarded) {
-      /***  Add watermark to Status ***/
-      await addWatermark(
-          inputSatusPath: filePath, outputStatusPath: outputStatusPath);
-    } else {
-      // Copy status to new dir without watermark
-      File(filePath).copySync(outputStatusPath);
-    }
+    // Copy status to the saved-status directory
+    File(filePath).copySync(outputStatusPath);
 
     // Close dialog
     Navigator.of(context).pop();
