@@ -51,6 +51,10 @@
   "_remove_ads_screen": "*** Remove Ads - Subscriptions Translations ***",
   "remove_ads_subscriptions": "Remove Ads - Subscriptions",
   "get_a_better_experience_with_our_app_without_Ads_showing": "Get a better experience with our app without Ads showing",
+  "you_already_removed_ads": "You have already removed ads. Thank you for your support!",
+  "grant_status_folder_title": "Allow access to WhatsApp statuses",
+  "grant_status_folder_message": "Since Android 11, WhatsApp keeps statuses in a protected folder. Tap the button, then press \"Use this folder\" and \"Allow\" on the next screen. You only need to do this once.\n\nTip: watch the statuses in WhatsApp first so they are downloaded.",
+  "grant_access": "Allow access",
 
   "_remove_watermark_screen": "*** Remove Watermark - Subscriptions Translations ***",
   "remove_watermark_subscriptions": "Remove Watermark - Subscriptions",

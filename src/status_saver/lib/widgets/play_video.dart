@@ -9,9 +9,9 @@ class PlayVideo extends StatefulWidget {
   final String videoSrc;
 
   PlayVideo({
-    @required this.videoSrc,
-    Key key,
-  }) : super(key: key);
+    required this.videoSrc,
+    super.key,
+  });
 
   @override
   _PlayVideoState createState() => _PlayVideoState();
@@ -20,9 +20,9 @@ class PlayVideo extends StatefulWidget {
 class _PlayVideoState extends State<PlayVideo> {
   // Variables
   final App _app = new App();
-  VideoPlayerController _videoPlayerController;
-  ChewieController _chewieController;
-  Future<void> _future;
+  late final VideoPlayerController _videoPlayerController;
+  ChewieController? _chewieController;
+  late final Future<void> _future;
 
   // Initialize video player
   Future<void> _initVideoPlayer() async {
@@ -38,6 +38,7 @@ class _PlayVideoState extends State<PlayVideo> {
 
     //  print(_videoPlayerController.value.aspectRatio);
 
+    if (!mounted) return;
     setState(() {
       _chewieController = ChewieController(
           videoPlayerController: _videoPlayerController,
@@ -64,11 +65,13 @@ class _PlayVideoState extends State<PlayVideo> {
     return FutureBuilder(
         future: _future,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          final chewie = _chewieController;
+          if (snapshot.connectionState == ConnectionState.done &&
+              chewie != null) {
             return Hero(
               tag: widget.videoSrc,
               child: Chewie(
-                controller: _chewieController,
+                controller: chewie,
               ),
             );
           } else {
@@ -82,8 +85,8 @@ class _PlayVideoState extends State<PlayVideo> {
 
   @override
   void dispose() {
-    super.dispose();
-    _videoPlayerController?.dispose();
     _chewieController?.dispose();
+    _videoPlayerController.dispose();
+    super.dispose();
   }
 }

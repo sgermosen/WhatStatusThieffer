@@ -29,30 +29,40 @@
 
 ### Sharing a link into the app
  You can also **share** a link straight from Instagram / TikTok / Facebook / a browser (Share → this app) and it
- opens the "Download from link" screen with the URL prefilled. This uses `receive_sharing_intent` (pinned to
- `1.4.5`, the classic `getInitialText` / `getTextStream` API) wired in `start_screen.dart`, plus a `text/*`
- `SEND` intent-filter in `AndroidManifest.xml`.
+ opens the "Download from link" screen with the URL prefilled. This uses `receive_sharing_intent` (`getInitialMedia` /
+ `getMediaStream`, keeping only text/url items) wired in `start_screen.dart`, plus a `text/*` `SEND`
+ intent-filter in `AndroidManifest.xml`.
 
  - **Android**: works out of the box with the intent-filter above.
  - **iOS**: receiving shares additionally requires adding a *Share Extension* target in Xcode (not configured
    here). Without it, iOS builds fine but won't appear in the iOS share sheet.
 
-# Knowed Issues
+# Building
 
-## Android 11+ scoped storage:
-With the privacy updates the rules to access those folders changed. The app now also scans the newer scoped
-location (`Android/media/com.whatsapp/WhatsApp/Media/.Statuses`) and declares the granular media permissions
-(`READ_MEDIA_IMAGES` / `READ_MEDIA_VIDEO`) for Android 13+, which improves access. On Android 11/12, full access
-to every folder may still require `MANAGE_EXTERNAL_STORAGE` ("All files access"), which is not requested here.
+Requires a recent **Flutter stable (3.47+)** and **JDK 17+**.
 
-## Bulk delete is not really deleting well: 
-On saved status if you press for 2 seconds, the bulk delete its enabled, but, apparently it work, it remove it from the screen, but, when you close the app, the deleted status are still there.
+```bash
+cd src/status_saver
+flutter pub get
+flutter test
+flutter build appbundle --release
+```
 
-## When a video is saved or shared it creates a picture for the watermark, but it doesn't be deleted: 
-This problem can be solved only by removing the watermark signal, but, will be great to solve the correct deletion of this issue. (In Production Version the AddWatermark method was disabled)
+See `docs/GUIA_PUBLICACION_PLAYSTORE.md` for signing, Play Console, AdMob and subscriptions.
 
-## Notifications are not working
-There's a configuration of a reminder that is supposed to be executed daily, on production is not working but on debug mode yes
+# Known Issues
+
+## Fixed
+- **Android 11+ WhatsApp statuses:** Android no longer allows reading the `.Statuses` folder directly. The app now asks
+  the user once (system folder picker) for access to that folder and keeps the permission. No "All files access" needed.
+- **Android 13+ permissions:** the app requests photo/video access instead of the removed storage permission.
+- **Bulk delete:** the list didn't refresh on selection and a failed delete hid files that were still on disk.
+- **Watermark leftovers:** the watermark feature (and its ffmpeg dependency) was removed.
+- **Notifications:** the broken daily reminder was removed.
+
+## Open
+- Not tested on a physical device yet: please test status access, saving, sharing, ads and purchases before release.
+- iOS is not set up (the app targets Android).
 
 # Feature wanted
 

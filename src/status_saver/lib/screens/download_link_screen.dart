@@ -8,7 +8,7 @@ import 'package:status_saver/services/link_downloader.dart';
 /// site with Open Graph tags) and download its media into the Saved folder.
 class DownloadLinkScreen extends StatefulWidget {
   /// Optional pre-filled URL (e.g. coming from a share action in the future).
-  final String initialUrl;
+  final String? initialUrl;
 
   DownloadLinkScreen({this.initialUrl});
 
@@ -21,16 +21,17 @@ class _DownloadLinkScreenState extends State<DownloadLinkScreen> {
   final LinkDownloader _downloader = new LinkDownloader();
   final TextEditingController _controller = new TextEditingController();
 
-  String _detectedPlatform;
+  String? _detectedPlatform;
   bool _isBusy = false;
-  AppLocalizations _i18n;
+  late AppLocalizations _i18n;
 
   @override
   void initState() {
     super.initState();
-    if (widget.initialUrl != null) {
-      _controller.text = widget.initialUrl;
-      _onChanged(widget.initialUrl);
+    final initialUrl = widget.initialUrl;
+    if (initialUrl != null) {
+      _controller.text = initialUrl;
+      _onChanged(initialUrl);
     }
   }
 
@@ -48,9 +49,10 @@ class _DownloadLinkScreenState extends State<DownloadLinkScreen> {
 
   Future<void> _pasteFromClipboard() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data != null && data.text != null) {
-      _controller.text = data.text;
-      _onChanged(data.text);
+    final text = data?.text;
+    if (text != null) {
+      _controller.text = text;
+      _onChanged(text);
     }
   }
 
@@ -153,10 +155,12 @@ class _DownloadLinkScreenState extends State<DownloadLinkScreen> {
                       Text(_i18n.translate('downloading')),
                     ],
                   )
-                : RaisedButton.icon(
-                    color: Colors.teal,
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                : FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
                     icon: Icon(Icons.file_download),
                     label: Text(
                       _i18n.translate('download'),

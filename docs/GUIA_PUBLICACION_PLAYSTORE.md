@@ -1,9 +1,10 @@
 # 📱 Guía completa de publicación en Google Play — Social Status Saver
 
-> Documento maestro para publicar la app en Google Play Store, activar las
+> Documento maestro para publicar la app en Google Play Store, con las
 > **compras dentro de la app (suscripciones)** y la **publicidad (AdMob)**.
 > Incluye textos de la ficha, especificaciones de las imágenes, capturas de uso,
-> y el código exacto a reactivar.
+> y lo que hay que configurar en Play Console y AdMob. **El código de anuncios
+> y compras ya está implementado**; lo que falta es configuración en la web.
 
 **Datos técnicos del proyecto (reales, tomados del código):**
 
@@ -12,10 +13,9 @@
 | Nombre visible actual | `Social Status Saver` (constante `APP_NAME`) |
 | Application ID (package) | `com.xamarindo.wpstatusaver` |
 | versionCode / versionName | `8` / `1.0.8` — se toman de `version:` en `pubspec.yaml` |
-| minSdkVersion | `21` (Android 5.0) |
-| targetSdkVersion / compileSdkVersion | `34` / `34` *(ver §7.1 sobre el requisito actual de Google)* |
-| Toolchain Android | AGP 7.4.2 · Gradle 7.6.4 · Kotlin 1.8.22 · `mavenCentral` (JDK 11 o 17) |
-| Flutter objetivo | **3.7.x** (el código aún no es null-safe; Flutter con Dart 3 no lo compila) |
+| minSdk / targetSdk / compileSdk | `24` / `36` / `37` (Play exige targetSdk 35+) |
+| Flutter / Dart | **3.47.x** (stable) / Dart 3.13 — código con null safety |
+| Toolchain Android | AGP 9.1 · Gradle 9.3 · Kotlin 2.4 · **JDK 17+** (plantilla oficial de Flutter) |
 | AdMob App ID | `ca-app-pub-8521044456540023~3652646925` |
 | Firma release | vía `android/key.properties` + `signingConfigs.release` |
 
@@ -42,7 +42,7 @@
 - [ ] **Keystore** de firma creado y guardado en un lugar seguro (§7).
 - [ ] `applicationId` definitivo. ⚠️ **No se puede cambiar** una vez publicado.
       El actual es `com.xamarindo.wpstatusaver`.
-- [ ] `targetSdkVersion` en **34 o superior** (requisito de Google 2024/2025).
+- [x] `targetSdk` **36** (Play exige 35+ desde ago-2025). Ya configurado.
 - [ ] Política de privacidad publicada en una URL pública (ya existe
       `privacy_policy.html` en el repo; súbela a un hosting y usa esa URL).
 - [ ] Decidir el modelo de monetización (ver §5 y §6): suscripciones para quitar
@@ -252,17 +252,23 @@ Declara con precisión. Para esta app:
 - **Permisos sensibles:** almacenamiento / fotos y videos → explica que es para
   leer y guardar los medios que el usuario elige.
 - Marca **cifrado en tránsito** (las descargas van por HTTPS).
+- **ID de publicidad:** el SDK de AdMob agrega el permiso
+  `com.google.android.gms.permission.AD_ID`. En Play Console →
+  *Contenido de la app → ID de publicidad* responde **Sí, la app usa el ID de
+  publicidad** con propósito *Publicidad o marketing*. Si respondes que no,
+  Play rechaza la versión.
+- **Compras:** declara *Información financiera → Historial de compras* solo si
+  aplica; las compras las procesa Google Play, la app no guarda datos de pago.
 
 ---
 
 ## 5. Compras dentro de la app (suscripciones)
 
-El código ya trae definidos los **IDs de suscripción** (en
-`lib/constants/app_constants.dart`), pero la lógica de `in_app_purchase` está
-**comentada**. Aquí está todo para activarla y por qué "nunca funcionó":
-casi siempre es porque **los productos no estaban creados/activos en Play
-Console**, la app **no estaba subida a un track** (interno como mínimo), o se
-probaba con una cuenta que no es **tester de licencia**.
+El **código de compras ya está implementado** (ver §5.4). Lo que "nunca
+funcionó" antes casi siempre se debe a que **los productos no estaban
+creados/activos en Play Console**, la app **no estaba subida a un track**
+(interno como mínimo), o se probaba con una cuenta que no es **tester de
+licencia**. Esta sección cubre esa parte, que es 100% en la web.
 
 ### 5.1 IDs que debes crear en Play Console (exactos)
 
@@ -270,13 +276,9 @@ Quitar anuncios (`REMOVE_ADS_SUB_IDS`):
 ```
 ads_1_week, ads_1_month, ads_3_months, ads_6_months, ads_1_year
 ```
-Quitar marca de agua (`REMOVE_WATERMARK_SUB_IDS`):
-```
-watermark_1_week, watermark_1_month, watermark_3_months, watermark_6_months, watermark_1_year
-```
-
-> Nota: la marca de agua está desactivada en la app actual (`addWatermark = false`).
-> Si no vas a usarla, crea solo las suscripciones `ads_*` y omite las `watermark_*`.
+> La función de marca de agua se eliminó, así que **ya no existen** las
+> suscripciones `watermark_*`. Puedes crear solo algunas de las `ads_*`
+> (por ejemplo `ads_1_month` y `ads_1_year`): la app muestra las que encuentre.
 
 ### 5.2 Crear las suscripciones (Play Console)
 1. Play Console → tu app → **Monetizar → Productos → Suscripciones**.
@@ -297,102 +299,27 @@ watermark_1_week, watermark_1_month, watermark_3_months, watermark_6_months, wat
 - Instala la app **desde el enlace de Play** (no un APK lateral) con esa cuenta.
 - Las suscripciones tardan unos minutos/horas en propagarse tras crearlas.
 
-### 5.4 Código: reactivar `in_app_purchase`
+### 5.4 Cómo está implementado (referencia)
 
-**a) `pubspec.yaml`** — descomenta / añade:
-```yaml
-  in_app_purchase: ^3.1.11
-```
-
-**b) `main.dart`** — al arrancar:
-```dart
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  if (defaultTargetPlatform == TargetPlatform.android) {
-    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
-  }
-  runApp(MyApp());
-}
-```
-
-**c) Servicio de compras** — crea `lib/services/purchases.dart`:
-```dart
-import 'dart:async';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:status_saver/constants/app_constants.dart';
-import 'package:status_saver/models/app_model.dart';
-
-class Purchases {
-  final InAppPurchase _iap = InAppPurchase.instance;
-  StreamSubscription<List<PurchaseDetails>> _sub;
-
-  /// Todos los IDs que ofreces (une los que uses).
-  Set<String> get _ids =>
-      {...REMOVE_ADS_SUB_IDS, ...REMOVE_WATERMARK_SUB_IDS};
-
-  /// Inicia la escucha de compras (llámalo al abrir la app).
-  void init() {
-    _sub = _iap.purchaseStream.listen(_onPurchaseUpdate, onError: (e) {
-      // manejar error
-    });
-    _restore(); // restaura compras previas
-  }
-
-  void dispose() => _sub?.cancel();
-
-  Future<bool> isAvailable() => _iap.isAvailable();
-
-  /// Trae los productos para pintarlos en pantalla.
-  Future<List<ProductDetails>> loadProducts() async {
-    final resp = await _iap.queryProductDetails(_ids);
-    final list = resp.productDetails;
-    list.sort((a, b) => a.rawPrice.compareTo(b.rawPrice));
-    return list;
-  }
-
-  /// Compra una suscripción.
-  void buy(ProductDetails product) {
-    final param = PurchaseParam(productDetails: product);
-    _iap.buyNonConsumable(purchaseParam: param);
-  }
-
-  Future<void> _restore() => _iap.restorePurchases();
-
-  void _onPurchaseUpdate(List<PurchaseDetails> purchases) {
-    for (final p in purchases) {
-      if (p.status == PurchaseStatus.purchased ||
-          p.status == PurchaseStatus.restored) {
-        // Entrega el beneficio según el ID
-        if (p.productID.startsWith('ads')) {
-          AppModel().disableShowAds();
-        } else if (p.productID.startsWith('watermark')) {
-          AppModel().disableWatermark();
-        }
-      }
-      if (p.pendingCompletePurchase) {
-        _iap.completePurchase(p);
-      }
-    }
-  }
-}
-```
-
-**d) Pantalla** — reactiva `lib/widgets/store_products.dart` (usa `loadProducts()`
-y `buy()`) y las pantallas `remove_ads_screen.dart` / `remove_watermark.dart` y
-sus entradas en el drawer (`my_navigation_drawer.dart`, hoy comentadas).
-
-> El permiso `com.android.vending.BILLING` ya está en el `AndroidManifest.xml`. ✔️
+- `lib/services/purchases.dart`: al arrancar la app consulta a Google Play las
+  suscripciones **activas** del usuario (`queryPastPurchases`). Si tiene alguna
+  `ads_*`, se ocultan los anuncios. Como Play no devuelve suscripciones
+  vencidas, **los anuncios vuelven solos cuando la suscripción expira**.
+- Escucha el flujo de compras y **confirma (acknowledge)** cada compra. Esto es
+  obligatorio: si no se confirma, Google reembolsa la compra a los 3 días.
+- `lib/widgets/store_products.dart` + `screens/remove_ads_screen.dart`: lista
+  las suscripciones con su precio local y botón *Suscribirse*. Menú lateral →
+  *Remover Ads*.
+- Si un ID no aparece en la app, revisa el log: imprime
+  `Products not found in Play Console: {...}` con los IDs que Play no encontró.
 
 ---
 
 ## 6. Publicidad con AdMob
 
-El código viejo usaba `firebase_admob` (deprecado). Hoy se usa
-**`google_mobile_ads`**. Los **IDs ya existen** en `app_constants.dart` y el
-**App ID ya está** en el `AndroidManifest.xml`. Pasos:
+El **código de anuncios ya está implementado** con `google_mobile_ads`
+(ver §6.2). Los IDs están en `app_constants.dart` y el App ID en el
+`AndroidManifest.xml`. Lo que falta es configuración en AdMob:
 
 ### 6.1 En AdMob (web)
 1. Crea la app en **AdMob → Apps → Add app** (o vincúlala si ya existe con el
@@ -407,100 +334,44 @@ El código viejo usaba `firebase_admob` (deprecado). Hoy se usa
 5. Configura el **mensaje de consentimiento (UMP/GDPR)** en AdMob → Privacy &
    messaging (obligatorio para tráfico de la UE).
 
-> ⚠️ Mientras desarrollas, usa **IDs de prueba** de Google para no arriesgar tu
-> cuenta por clics inválidos:
-> App ID prueba `ca-app-pub-3940256099942544~3347511713`,
-> Banner `…/6300978111`, Intersticial `…/1033173712`, Recompensado `…/5224354917`.
+> ✅ **IDs de prueba automáticos:** los builds *debug* usan siempre los
+> anuncios de prueba de Google, así que puedes probar sin riesgo de que AdMob
+> suspenda tu cuenta por clics inválidos. Solo los builds *release* usan tus
+> IDs reales.
 
-### 6.2 Código: reactivar anuncios con `google_mobile_ads`
+### 6.2 Cómo está implementado (referencia)
 
-**a) `pubspec.yaml`:**
-```yaml
-  google_mobile_ads: ^5.1.0
-```
-
-**b) `AndroidManifest.xml`** — ya tienes el meta-data del App ID ✔️. Verifica que
-sea el real (no el de prueba) antes de publicar.
-
-**c) `main.dart`:**
-```dart
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-  runApp(MyApp());
-}
-```
-
-**d) Reescribe `lib/app/ads.dart`** con la API nueva:
-```dart
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:status_saver/constants/app_constants.dart';
-import 'package:status_saver/models/app_model.dart';
-
-class Ads {
-  static InterstitialAd _interstitial;
-
-  /// Banner listo para insertar en una pantalla.
-  static BannerAd createBanner() {
-    return BannerAd(
-      adUnitId: ADMOB_BANNER_ID,
-      size: AdSize.banner,
-      request: const AdRequest(),
-      listener: const BannerAdListener(),
-    )..load();
-  }
-
-  /// Precarga un intersticial.
-  static void loadInterstitial() {
-    InterstitialAd.load(
-      adUnitId: ADMOB_INTERSTITIAL_ID,
-      request: const AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (ad) => _interstitial = ad,
-        onAdFailedToLoad: (_) => _interstitial = null,
-      ),
-    );
-  }
-
-  /// Muestra el intersticial si el usuario no pagó por quitar anuncios.
-  static void showInterstitial() {
-    if (!AppModel().showAds || AppModel().isRewarded) return;
-    _interstitial?.show();
-    _interstitial = null;
-    loadInterstitial(); // precarga el siguiente
-  }
-}
-```
-
-**e) Usos:** en `photos_tab.dart` / `videos_tab.dart` / `status_card.dart` hay
-llamadas comentadas tipo `Ads.showInterstitialAd`. Reemplázalas por
-`Ads.showInterstitial()` (p. ej. al guardar un status). Para el banner, inserta
-el widget de `createBanner()` en el `Scaffold` de `home_screen.dart`.
-
-> Recuerda el enlace lógico con las compras: si el usuario tiene la suscripción
-> `ads_*`, `AppModel().showAds` es `false` y no se muestran anuncios.
+- `lib/app/ads.dart`:
+  - **Consentimiento GDPR/UMP**: al arrancar pide el consentimiento cuando hace
+    falta (usuarios de la UE/Reino Unido) usando el mensaje que configures en
+    AdMob → *Privacy & messaging*. Sin ese mensaje creado, en la UE no se
+    servirán anuncios.
+  - **Banner adaptativo** abajo en la pantalla principal (`BannerAdWidget`).
+  - **Intersticial** al guardar un estado, con un mínimo de **2 minutos** entre
+    uno y otro para no molestar (`_interstitialCooldown`).
+- `screens/rewarded_videos_screen.dart`: **video recompensado** → 15 minutos
+  sin anuncios (`REWARDED_MINUTES`). Menú lateral → *Videos Recompensados*.
+- Ningún anuncio se muestra si el usuario compró *quitar anuncios* o está en su
+  periodo recompensado.
 
 ---
 
 ## 7. Firma, compilación y subida (paso a paso)
 
-### 7.1 targetSdk (ya en 34)
-`android/app/build.gradle` ya tiene `compileSdkVersion 34` / `targetSdkVersion 34`
-y `android:exported="true"` en `MainActivity` (obligatorio desde API 31).
+### 7.1 Entorno y nivel de API (✅ ya configurado)
 
-> ⚠️ **Requisito vigente de Google:** desde el 31-ago-2025 Play exige
-> `targetSdk 35` para apps nuevas y actualizaciones (y cada año sube uno).
-> Llegar a 35+ requiere AGP 8 + Gradle 8 + JDK 17 + Flutter moderno, lo que a su
-> vez exige migrar el código a null safety. Con 34 puedes compilar y probar hoy;
-> para **subir a Play** muy probablemente necesites ese salto. Confírmalo en
-> Play Console → *Política → Nivel de API objetivo*.
-
-Prueba bien en un dispositivo real: en Android 13+ los permisos de almacenamiento cambian
-(esta rama ya declara `READ_MEDIA_IMAGES`/`READ_MEDIA_VIDEO`). Para acceso amplio
-a carpetas de otras apps quizá necesites `MANAGE_EXTERNAL_STORAGE` (requiere
-justificación en Play — ver §8).
+- `targetSdk 36` (Play exige 35+), `compileSdk 37` (lo requieren
+  `permission_handler` y `receive_sharing_intent`), `minSdk 24` (Android 7).
+- El proyecto Android usa la **plantilla oficial de Flutter 3.47**
+  (`android/*.gradle.kts`). Necesitas **Flutter stable reciente y JDK 17+**.
+- **Acceso a los estados de WhatsApp (Android 11+):** Android ya no deja leer
+  la carpeta `.Statuses` directamente. La app muestra una pantalla
+  *"Permitir acceso"* que abre el selector de carpetas del sistema; el usuario
+  toca **"Usar esta carpeta" → "Permitir"** una sola vez. No se usa
+  `MANAGE_EXTERNAL_STORAGE`, así que **no hace falta la declaración especial de
+  permisos** de Play que suele rechazar este tipo de apps.
+- Los estados guardados van a `Pictures/Social Status Saver` (visibles en la
+  galería).
 
 ### 7.2 Crear el keystore (una sola vez)
 ```bash
@@ -532,9 +403,12 @@ storeFile=/ruta/absoluta/social-status-saver.jks
 cd src/status_saver
 flutter clean
 flutter pub get
+flutter test            # 9 pruebas: arranque de la app, traducciones, enlaces
 flutter build appbundle --release
 # Resultado: build/app/outputs/bundle/release/app-release.aab
 ```
+> Si `key.properties` apunta a un keystore que no existe, el build falla en
+> `validateSigningRelease`: corrige la ruta `storeFile`.
 Para subir versiones nuevas, incrementa `version:` en `pubspec.yaml` (p.ej. `1.0.9+9`).
 
 ### 7.5 Subir a Play Console
@@ -608,11 +482,13 @@ suspensiones más comunes:
 | Función | Archivo |
 |---------|---------|
 | Constantes (IDs, nombre, AdMob, suscripciones) | `src/status_saver/lib/constants/app_constants.dart` |
-| Anuncios (reactivar) | `src/status_saver/lib/app/ads.dart` |
-| Compras (reactivar) | `src/status_saver/lib/widgets/store_products.dart`, `screens/remove_ads_screen.dart` |
+| Anuncios | `src/status_saver/lib/app/ads.dart`, `screens/rewarded_videos_screen.dart` |
+| Compras | `src/status_saver/lib/services/purchases.dart`, `widgets/store_products.dart`, `screens/remove_ads_screen.dart` |
 | Descarga por enlace | `src/status_saver/lib/services/link_downloader.dart` |
 | Permisos | `src/status_saver/android/app/src/main/AndroidManifest.xml` |
-| Firma / build | `src/status_saver/android/app/build.gradle`, `android/key.properties` |
+| Firma / build | `src/status_saver/android/app/build.gradle.kts`, `android/key.properties` |
+| Acceso a estados (Android 11+) | `android/app/src/main/kotlin/.../MainActivity.kt`, `lib/services/saf_statuses.dart` |
+| Pruebas | `src/status_saver/test/` |
 | Ícono / logo | `logoBase.png`, `src/status_saver/assets/images/app_logo.png` |
 | Política de privacidad | `privacy_policy.html` |
 | Mockups de la ficha | `docs/store_assets/*.svg` |

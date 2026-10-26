@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/app/app.dart';
 import 'package:status_saver/constants/app_constants.dart';
-import 'package:status_saver/models/app_model.dart';
 import 'package:status_saver/screens/about_us_screen.dart';
 import 'package:status_saver/screens/app_settings_screen.dart';
 import 'package:status_saver/screens/download_link_screen.dart';
 import 'package:status_saver/screens/guide_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:status_saver/screens/remove_ads_screen.dart';
-import 'package:status_saver/screens/remove_watermark.dart';
 import 'package:status_saver/app/app_localizations.dart';
 import 'package:status_saver/screens/rewarded_videos_screen.dart';
 
@@ -46,33 +43,13 @@ class MyNavigationDrawer extends StatelessWidget {
         ),
         Divider(thickness: 1),
 
-        /// *** New features *** ///
-        // ListTile(
-        //   leading: Icon(Icons.block),
-        //   title: Text(
-        //     i18n.translate('remove_ads'),
-        //   ),
-        //   trailing: Icon(Icons.arrow_forward),
-        //   onTap: () {
-        //     // Go to Remove Ads screen
-        //     Navigator.push(context,
-        //         new MaterialPageRoute(builder: (context) => RemoveAdsScreen()));
-        //   },
-        // ),
-
-        // ListTile(
-        //   leading: Icon(Icons.copyright),
-        //   title:
-        //       Text(i18n.translate('remove_watermark'), style: _menutextcolor),
-        //   trailing: Icon(Icons.arrow_forward),
-        //   onTap: () {
-        //     // Go to Remove Watermark screen
-        //     Navigator.push(
-        //         context,
-        //         new MaterialPageRoute(
-        //             builder: (context) => RemoveWatermarkScreen()));
-        //   },
-        // ),
+        ListTile(
+          leading: Icon(Icons.block, color: Colors.red),
+          title: Text(i18n.translate('remove_ads'), style: _menutextcolor),
+          trailing: Icon(Icons.arrow_forward),
+          onTap: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => RemoveAdsScreen())),
+        ),
 
         ListTile(
           leading: Icon(Icons.settings),
@@ -91,18 +68,8 @@ class MyNavigationDrawer extends StatelessWidget {
           leading: Icon(Icons.play_circle_fill, color: Colors.red),
           title: Text(i18n.translate('rewarded_videos'), style: _menutextcolor),
           trailing: Icon(Icons.arrow_forward),
-          onTap: () async {
-            // Go to Rewarded Videos screen
-            // await Navigator.of(context)
-            //     .push(new MaterialPageRoute(
-            //        // builder: (context) => RewardedVideosScreen()))
-            //     .then((_) {
-            //   // Check to hide Banner Ads
-            //   // if (AppModel().isRewarded) {
-            //   //   Ads.disposeBannerAd();
-            //   // }
-            // });
-          },
+          onTap: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => RewardedVideosScreen())),
         ),
 
         /// *** End new features
@@ -136,7 +103,7 @@ class MyNavigationDrawer extends StatelessWidget {
           },
         ),
         ListTile(
-          leading: Icon(FontAwesomeIcons.facebook, color: Colors.blue),
+          leading: FaIcon(FontAwesomeIcons.facebook, color: Colors.blue),
           title: Text(i18n.translate('like_our_page'), style: _menutextcolor),
           subtitle: Text(
             '@$FACEBOOK_USERNAME',

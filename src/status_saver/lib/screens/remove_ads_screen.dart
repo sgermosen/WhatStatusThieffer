@@ -11,7 +11,6 @@ class RemoveAdsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(i18n.translate('remove_ads_subscriptions')),
       ),
-      backgroundColor: Colors.grey[400],
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(8, 10, 8, 8),
         child: Column(
@@ -29,13 +28,13 @@ class RemoveAdsScreen extends StatelessWidget {
             ),
             Divider(),
             // List of subscriptions
-            // StoreProducts(
-            //   subscriptionIDs: REMOVE_ADS_SUB_IDS,
-            //   icon: CircleAvatar(
-            //     backgroundColor: Colors.red,
-            //     child: Icon(Icons.block, color: Colors.white),
-            //   ),
-            // ),
+            StoreProducts(
+              subscriptionIDs: REMOVE_ADS_SUB_IDS,
+              icon: CircleAvatar(
+                backgroundColor: Colors.red,
+                child: Icon(Icons.block, color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),

@@ -10,7 +10,7 @@ class AppModel extends Model {
   bool isDarkThemeEnabled = false;
   bool isRewarded = false;
   int rewardedCounter = 0;
-  Timer _timer;
+  Timer? _timer;
   List<String> selectedStatusList = [];
 
   /// Create Singleton factory for [AppModel]
@@ -48,8 +48,8 @@ class AppModel extends Model {
     print('updateRewarded() -> success');
   }
 
-  void rewardedTimer({@required VoidCallback onEndTimer}) {
-    if (_timer != null) _timer.cancel();
+  void rewardedTimer({required VoidCallback onEndTimer}) {
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       if (this.rewardedCounter > 0) {
         // Count down the rewarded minutes
@@ -58,7 +58,7 @@ class AppModel extends Model {
       } else {
         this.isRewarded = false;
         notifyListeners();
-        _timer.cancel();
+        timer.cancel();
         onEndTimer();
       }
     });

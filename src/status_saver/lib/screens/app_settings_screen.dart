@@ -16,7 +16,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   String _savedStatusDir = '';
   bool _autoPlayVideo = true;
   bool _isDarkThemeEnabled = false;
-  AppLocalizations _i18n;
+  late AppLocalizations _i18n;
 
   @override
   void initState() {
@@ -116,7 +116,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   // Allows the user to browse the file system and pick a folder
   void _getUserDirectory() async {
     // Get choosed dir
-    String newDirPath = await FilePicker.platform.getDirectoryPath();
+    final String? newDirPath = await FilePicker.getDirectoryPath();
 
     if (newDirPath != null) {
       // Get folder name

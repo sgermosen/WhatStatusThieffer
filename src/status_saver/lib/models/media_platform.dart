@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// Represents a social media platform whose media (WhatsApp statuses,
 /// stories, reels or downloaded videos) this app can browse and save.
@@ -14,7 +15,7 @@ class MediaPlatform {
   final String titleKey;
 
   /// Icon shown in the platform picker card.
-  final IconData icon;
+  final FaIconData icon;
 
   /// Brand color for the icon.
   final Color color;
@@ -27,11 +28,17 @@ class MediaPlatform {
   /// versions and Android versions).
   final List<String> mediaDirs;
 
+  /// Folder (relative to the storage root) that Android 11+ only lets us read
+  /// through the system folder picker (Storage Access Framework). Null for
+  /// platforms whose media lives in normal, readable media folders.
+  final String? safPath;
+
   const MediaPlatform({
-    @required this.key,
-    @required this.titleKey,
-    @required this.icon,
-    @required this.color,
-    @required this.mediaDirs,
+    required this.key,
+    required this.titleKey,
+    required this.icon,
+    required this.color,
+    required this.mediaDirs,
+    this.safPath,
   });
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/app/app_localizations.dart';
 
 class GuideScreen extends StatefulWidget {

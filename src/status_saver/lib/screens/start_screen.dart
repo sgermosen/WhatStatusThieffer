@@ -21,7 +21,7 @@ class _StartScreenState extends State<StartScreen> {
   final App _app = new App();
 
   /// Subscription to links shared into the app while it is running.
-  StreamSubscription _intentSub;
+  StreamSubscription<List<SharedMediaFile>>? _intentSub;
 
   void _initializations() async {
     // Init Admob app
@@ -41,31 +41,41 @@ class _StartScreenState extends State<StartScreen> {
 
   @override
   void dispose() {
-    if (_intentSub != null) _intentSub.cancel();
+    _intentSub?.cancel();
     super.dispose();
   }
 
   /// Handle links shared into the app from the system share sheet.
   void _initShareIntent() {
     // App already running and a link is shared into it.
-    _intentSub = ReceiveSharingIntent.getTextStream().listen(
-      (String value) => _openSharedLink(value),
+    _intentSub = ReceiveSharingIntent.instance.getMediaStream().listen(
+      _handleSharedItems,
       onError: (dynamic err) {
         // Ignore share-intent errors.
       },
     );
 
     // App launched from a shared link (cold start).
-    ReceiveSharingIntent.getInitialText().then((String value) {
-      _openSharedLink(value);
+    ReceiveSharingIntent.instance.getInitialMedia().then((items) {
+      _handleSharedItems(items);
       // Avoid re-processing the same intent on rebuilds.
-      ReceiveSharingIntent.reset();
+      ReceiveSharingIntent.instance.reset();
     });
+  }
+
+  /// Shared text/links arrive as text or url items; ignore shared files.
+  void _handleSharedItems(List<SharedMediaFile> items) {
+    for (final item in items) {
+      if (item.type == SharedMediaType.text ||
+          item.type == SharedMediaType.url) {
+        _openSharedLink(item.path);
+        return;
+      }
+    }
   }
 
   /// Open the download screen prefilled with the shared link (if it is one).
   void _openSharedLink(String value) {
-    if (value == null) return;
     if (extractUrl(value) == null) return;
     Future(() {
       if (!mounted) return;

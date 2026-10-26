@@ -8,21 +8,21 @@ class StatusCard extends StatefulWidget {
   final String statusPath;
   final bool isVideo;
   final bool isSelected;
-  final VoidCallback onTap;
-  final VoidCallback onLongPress;
-  final VoidCallback onSave;
-  final VoidCallback onDelete;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+  final VoidCallback? onSave;
+  final VoidCallback? onDelete;
 
   StatusCard({
-    Key key,
-    this.statusPath,
+    super.key,
+    required this.statusPath,
     this.isVideo = false,
     this.isSelected = false,
     this.onTap,
     this.onLongPress,
     this.onSave,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   _StatusCardState createState() => _StatusCardState();
@@ -31,7 +31,7 @@ class StatusCard extends StatefulWidget {
 class _StatusCardState extends State<StatusCard> {
   // Variables
   final App _app = new App();
-  Future _thumbnail;
+  Future<String?>? _thumbnail;
 
   @override
   void initState() {
@@ -71,7 +71,7 @@ class _StatusCardState extends State<StatusCard> {
                       IconButton(
                           icon: Icon(Icons.get_app),
                           onPressed: () {
-                            widget.onSave();
+                            widget.onSave?.call();
                             // Save status
                             _app.saveFileInGallery(context,
                                 filePath: widget.statusPath);
@@ -90,7 +90,7 @@ class _StatusCardState extends State<StatusCard> {
                         // Share not saved status
                         _app.shareNotSavedStatus(widget.statusPath, context);
                       } else {
-                        Share.shareFiles([this.widget.statusPath]);
+                        SharePlus.instance.share(ShareParams(files: [XFile(this.widget.statusPath)]));
                       }
                   }),
                 ],
@@ -134,11 +134,13 @@ class _StatusCardState extends State<StatusCard> {
         builder: (context, snapshot) {
           /// Check result
           if (snapshot.connectionState == ConnectionState.done) {
-            if (!snapshot.hasData)
-              return Center(
-                child: CircularProgressIndicator(),
+            if (!snapshot.hasData || snapshot.data == null) {
+              // No thumbnail available: show a generic video icon.
+              return const Center(
+                child: Icon(Icons.videocam, size: 50, color: Colors.grey),
               );
-            return _imageStatus(snapshot.data);
+            }
+            return _imageStatus(snapshot.data!);
           } else {
             /// Loading video placeholder
             return Card(

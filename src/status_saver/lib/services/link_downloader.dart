@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:status_saver/app/app.dart';
 
@@ -17,8 +16,8 @@ class ResolvedMedia {
   final Map<String, String> headers;
 
   ResolvedMedia({
-    @required this.url,
-    @required this.type,
+    required this.url,
+    required this.type,
     this.headers = const {},
   });
 }
@@ -29,7 +28,7 @@ const String _kUserAgent =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
     '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
-Map<String, String> _browserHeaders([String referer]) {
+Map<String, String> _browserHeaders([String? referer]) {
   final h = <String, String>{
     'User-Agent': _kUserAgent,
     'Accept-Language': 'en-US,en;q=0.9',
@@ -47,7 +46,7 @@ abstract class PlatformResolver {
   bool canHandle(String url);
 
   /// Resolve the direct media URL, or return null if it couldn't be found.
-  Future<ResolvedMedia> resolve(String url);
+  Future<ResolvedMedia?> resolve(String url);
 }
 
 /// Picks the right resolver for a link and falls back to Open Graph tags,
@@ -61,7 +60,7 @@ class LinkDownloader {
   final _OpenGraphResolver _fallback = _OpenGraphResolver();
 
   /// Detect the platform name from a raw link (for the UI).
-  String detectPlatform(String rawUrl) {
+  String? detectPlatform(String rawUrl) {
     final url = extractUrl(rawUrl);
     if (url == null) return null;
     for (final r in _resolvers) {
@@ -123,23 +122,23 @@ class LinkDownloader {
 
 /// Extract the first http(s) URL from a shared string (users often share
 /// "look at this <url> lol").
-String extractUrl(String raw) {
+String? extractUrl(String? raw) {
   if (raw == null) return null;
   final match =
       RegExp(r'https?:\/\/[^\s]+').firstMatch(raw.trim());
-  return match != null ? match.group(0) : null;
+  return match?.group(0);
 }
 
 /// Fetch a page as HTML using browser-like headers (follows redirects, which
 /// resolves short links like vm.tiktok.com / fb.watch).
-Future<String> _fetchHtml(String url, [String referer]) async {
+Future<String> _fetchHtml(String url, [String? referer]) async {
   final resp = await http.get(Uri.parse(url), headers: _browserHeaders(referer));
   return resp.body;
 }
 
 /// Read a `<meta property="og:xxx" content="yyy">` value, tolerating either
 /// attribute order and single/double quotes.
-String _readMeta(String html, String property) {
+String? _readMeta(String html, String property) {
   // property before content
   final a = RegExp(
     '<meta[^>]+(?:property|name)=["\']' +
@@ -147,7 +146,7 @@ String _readMeta(String html, String property) {
         '["\'][^>]+content=["\']([^"\']+)["\']',
     caseSensitive: false,
   ).firstMatch(html);
-  if (a != null) return _unescape(a.group(1));
+  if (a != null) return _unescape(a.group(1)!);
 
   // content before property
   final b = RegExp(
@@ -156,20 +155,19 @@ String _readMeta(String html, String property) {
         '["\']',
     caseSensitive: false,
   ).firstMatch(html);
-  if (b != null) return _unescape(b.group(1));
+  if (b != null) return _unescape(b.group(1)!);
 
   return null;
 }
 
 /// Unescape common HTML / JSON / unicode escaping found in scraped URLs.
 String _unescape(String s) {
-  if (s == null) return null;
   return s
       .replaceAll(r'\/', '/')
       .replaceAll('&amp;', '&')
       .replaceAllMapped(
           RegExp(r'\\u([0-9a-fA-F]{4})'),
-          (m) => String.fromCharCode(int.parse(m.group(1), radix: 16)));
+          (m) => String.fromCharCode(int.parse(m.group(1)!, radix: 16)));
 }
 
 /// ---------------------------------------------------------------------------
@@ -183,7 +181,7 @@ class TikTokResolver implements PlatformResolver {
   bool canHandle(String url) => url.contains('tiktok.com');
 
   @override
-  Future<ResolvedMedia> resolve(String url) async {
+  Future<ResolvedMedia?> resolve(String url) async {
     final html = await _fetchHtml(url, 'https://www.tiktok.com/');
 
     // Newer embedded JSON blob.
@@ -208,14 +206,14 @@ class TikTokResolver implements PlatformResolver {
     return null;
   }
 
-  String _fromUniversalData(String html) {
+  String? _fromUniversalData(String html) {
     final m = RegExp(
       r'<script id="__UNIVERSAL_DATA_FOR_REHYDRATION__"[^>]*>(.+?)</script>',
       dotAll: true,
     ).firstMatch(html);
     if (m == null) return null;
     try {
-      final data = jsonDecode(m.group(1));
+      final data = jsonDecode(m.group(1)!);
       final item = data['__DEFAULT_SCOPE__']['webapp.video-detail']['itemInfo']
           ['itemStruct']['video'];
       return item['downloadAddr'] ?? item['playAddr'];
@@ -224,14 +222,14 @@ class TikTokResolver implements PlatformResolver {
     }
   }
 
-  String _fromSigiState(String html) {
+  String? _fromSigiState(String html) {
     final m = RegExp(
       r'<script id="SIGI_STATE"[^>]*>(.+?)</script>',
       dotAll: true,
     ).firstMatch(html);
     if (m == null) return null;
     try {
-      final data = jsonDecode(m.group(1));
+      final data = jsonDecode(m.group(1)!);
       final Map items = data['ItemModule'];
       final first = items.values.first;
       final video = first['video'];
@@ -254,7 +252,7 @@ class FacebookResolver implements PlatformResolver {
       url.contains('facebook.com') || url.contains('fb.watch');
 
   @override
-  Future<ResolvedMedia> resolve(String url) async {
+  Future<ResolvedMedia?> resolve(String url) async {
     final html = await _fetchHtml(url, 'https://www.facebook.com/');
 
     for (final key in const [
@@ -266,9 +264,9 @@ class FacebookResolver implements PlatformResolver {
       'sd_src',
     ]) {
       final m = RegExp('"' + key + '":"(.*?)"').firstMatch(html);
-      if (m != null && m.group(1).isNotEmpty) {
+      if (m != null && m.group(1)!.isNotEmpty) {
         return ResolvedMedia(
-          url: _unescape(m.group(1)),
+          url: _unescape(m.group(1)!),
           type: MediaType.video,
           headers: _browserHeaders('https://www.facebook.com/'),
         );
@@ -299,7 +297,7 @@ class InstagramResolver implements PlatformResolver {
   bool canHandle(String url) => url.contains('instagram.com');
 
   @override
-  Future<ResolvedMedia> resolve(String url) async {
+  Future<ResolvedMedia?> resolve(String url) async {
     final html = await _fetchHtml(url, 'https://www.instagram.com/');
 
     final video = _readMeta(html, 'og:video') ??
@@ -319,7 +317,7 @@ class InstagramResolver implements PlatformResolver {
 /// Generic Open Graph fallback (works for any site exposing og:video/og:image)
 /// ---------------------------------------------------------------------------
 class _OpenGraphResolver {
-  Future<ResolvedMedia> resolve(String url) async {
+  Future<ResolvedMedia?> resolve(String url) async {
     final html = await _fetchHtml(url);
     final video = _readMeta(html, 'og:video') ??
         _readMeta(html, 'og:video:url') ??

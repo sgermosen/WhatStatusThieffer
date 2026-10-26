@@ -11,8 +11,8 @@ class ViewStatusScreen extends StatefulWidget {
   final bool savedStatus;
 
   ViewStatusScreen({
-    @required this.filePath,
-    @required this.savedStatus,
+    required this.filePath,
+    required this.savedStatus,
   });
 
   @override
@@ -22,7 +22,7 @@ class ViewStatusScreen extends StatefulWidget {
 class _ViewStatusScreenState extends State<ViewStatusScreen> {
   // Variable
   final _app = new App();
-  AppLocalizations _i18n;
+  late AppLocalizations _i18n;
 
   @override
   void dispose() {
@@ -44,14 +44,13 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
         actions: <Widget>[
           widget.savedStatus
               ? _savedStatusesButton()
-              : FlatButton.icon(
-                  textColor: Colors.white,
+              : TextButton.icon(
+                  style: TextButton.styleFrom(foregroundColor: Colors.white),
                   icon: Icon(Icons.file_download), //`Icon` to display
                   label: Text(_i18n.translate('SAVE'),
                       style: TextStyle(fontSize: 20.0)), //`Text` to display
                   onPressed: () async {
-                    // Show Ad
-                    //Ads.showInterstitialAd();
+                    Ads.showInterstitial();
 
                     /// Save image
                     _app.saveFileInGallery(context, filePath: widget.filePath);
@@ -92,7 +91,7 @@ class _ViewStatusScreenState extends State<ViewStatusScreen> {
             icon: Icon(Icons.share),
             onPressed: () async {
               /// Share status
-              Share.shareFiles([widget.filePath]);
+              SharePlus.instance.share(ShareParams(files: [XFile(widget.filePath)]));
             },
           ),
         ],

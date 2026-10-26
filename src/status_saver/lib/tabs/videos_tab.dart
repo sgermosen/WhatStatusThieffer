@@ -1,9 +1,9 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/app/app.dart';
 import 'package:status_saver/screens/view_status_screen.dart';
+import 'package:status_saver/widgets/folder_access_prompt.dart';
 import 'package:status_saver/widgets/status_card.dart';
 import 'package:status_saver/app/app_localizations.dart';
 
@@ -11,7 +11,7 @@ class VideosTab extends StatefulWidget {
   // Variables
   final String app;
 
-  VideosTab({@required this.app});
+  VideosTab({required this.app});
 
   @override
   VideosTabState createState() {
@@ -22,8 +22,8 @@ class VideosTab extends StatefulWidget {
 class VideosTabState extends State<VideosTab> {
   // Variables
   final App _app = new App();
-  List _videoList;
-  AppLocalizations _i18n;
+  List<String>? _videoList;
+  late AppLocalizations _i18n;
 
   /// View Status and update UI on delete
   Future<void> _viewStatus(String statusPath) async {
@@ -38,7 +38,7 @@ class VideosTabState extends State<VideosTab> {
     if (result != null) {
       // Update user interface
       setState(() {
-        _videoList.remove(result);
+        _videoList?.remove(result);
       });
 
       // Show message
@@ -50,29 +50,33 @@ class VideosTabState extends State<VideosTab> {
     }
   }
 
+  bool _needsFolderAccess = false;
+  static const _extensions = [".mp4", ".mkv", ".mov", ".3gp"];
+
   @override
   void initState() {
     super.initState();
+    _load();
+  }
 
-    // Get all media directories for the selected platform and merge videos.
-    _app.getMediaDirs(widget.app).then((dirs) {
-      final List<String> videos = [];
-      for (final path in dirs) {
-        try {
-          videos.addAll(Directory(path)
-              .listSync()
-              .map((item) => item.path)
-              .where((item) =>
-                  item.endsWith(".mp4") ||
-                  item.endsWith(".mkv") ||
-                  item.endsWith(".mov")));
-        } catch (e) {
-          // Ignore directories we can't read.
-          // print('Could not read dir $path: $e');
-        }
-      }
-      if (mounted) setState(() => _videoList = videos);
+  /// Load the platform's media and keep only this tab's file types.
+  Future<void> _load() async {
+    final result = await _app.loadMediaFiles(widget.app);
+    final files = result.files
+        .where((f) => _extensions.any((e) => f.toLowerCase().endsWith(e)))
+        .toList();
+    if (!mounted) return;
+    setState(() {
+      _needsFolderAccess = result.needsFolderAccess;
+      _videoList = files;
     });
+  }
+
+  Future<void> _grantFolderAccess() async {
+    if (await _app.requestFolderAccess(widget.app)) {
+      setState(() => _videoList = null);
+      _load();
+    }
   }
 
   @override
@@ -89,15 +93,18 @@ class VideosTabState extends State<VideosTab> {
 
   /// Show video statuses
   Widget _showVideoStatuses() {
+    if (_needsFolderAccess) {
+      return FolderAccessPrompt(onGrant: _grantFolderAccess);
+    }
     /// Check list
     if (_videoList == null) {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (_videoList.isNotEmpty) {
+    } else if (_videoList!.isNotEmpty) {
       /// Show video list
       return GridView.builder(
-          itemCount: _videoList.length,
+          itemCount: _videoList!.length,
           padding: EdgeInsets.only(bottom: 65.0),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -105,12 +112,12 @@ class VideosTabState extends State<VideosTab> {
           itemBuilder: (context, index) {
             /// Get thumbnail from video
             return StatusCard(
-              statusPath: _videoList[index],
+              statusPath: _videoList![index],
               isVideo: true,
               onTap: () {
-                _viewStatus(_videoList[index]);
+                _viewStatus(_videoList![index]);
               },
-              //    onSave: Ads.showInterstitialAd,
+              onSave: Ads.showInterstitial,
             );
           });
     } else {

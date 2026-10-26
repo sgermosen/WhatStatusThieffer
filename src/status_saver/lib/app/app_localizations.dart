@@ -13,11 +13,11 @@ class AppLocalizations {
   // Helper method to keep the code in widgets concise
   // Localizations are accessed using an InheritedWidget "of syntax"
   static AppLocalizations of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
   // Localized strings map
-  Map<String, String> _localizedStrings;
+  Map<String, String> _localizedStrings = {};
 
   // Load the json language file from the "lang folder"
   Future<bool> load() async {
@@ -33,7 +33,8 @@ class AppLocalizations {
 
   // Translate method - will be called from every widget which needs a localized text
   String translate(String key) {
-    return _localizedStrings[key];
+    // Fall back to the key itself so a missing translation never crashes.
+    return _localizedStrings[key] ?? key;
   }
 
   // Static member to have a simple access to the delegate from the MaterialApp
@@ -51,13 +52,14 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) {
-    return SUPPORTED_LOCALES.contains(locale);
+    return SUPPORTED_LOCALES
+        .any((l) => l.languageCode == locale.languageCode);
   }
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
     // Init AppLocalizations class where the json loading actually runs
-    final AppLocalizations localizations = new AppLocalizations(locale);
+    final AppLocalizations localizations = AppLocalizations(locale);
     await localizations.load();
     return localizations;
   }

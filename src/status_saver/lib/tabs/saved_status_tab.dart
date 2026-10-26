@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/app/app.dart';
 import 'package:status_saver/models/app_model.dart';
 import 'package:status_saver/screens/view_status_screen.dart';
@@ -19,8 +18,8 @@ class SavedStatusTab extends StatefulWidget {
 class SavedStatusTabState extends State<SavedStatusTab> {
   /// Variables
   final App _app = new App();
-  List<String> _savedStatusList;
-  AppLocalizations _i18n;
+  List<String>? _savedStatusList;
+  late AppLocalizations _i18n;
 
   @override
   void initState() {
@@ -38,7 +37,7 @@ class SavedStatusTabState extends State<SavedStatusTab> {
               return item.path;
             }).toList();
             // Order date DESC
-            _savedStatusList.sort((a, b) => b.compareTo(a));
+            _savedStatusList!.sort((a, b) => b.compareTo(a));
           });
         }
       } else {
@@ -59,8 +58,9 @@ class SavedStatusTabState extends State<SavedStatusTab> {
   @override
   Widget build(BuildContext context) {
     _i18n = AppLocalizations.of(context);
+    // Rebuild when the selection changes so the check marks and the bulk
+    // delete bar show up.
     return ScopedModelDescendant<AppModel>(
-        rebuildOnChange: false,
         builder: (context, chald, appModel) {
           return _showSavedStatuses();
         });
@@ -78,7 +78,7 @@ class SavedStatusTabState extends State<SavedStatusTab> {
     if (result != null) {
       // Update user interface
       setState(() {
-        _savedStatusList.remove(result);
+        _savedStatusList?.remove(result);
       });
 
       // Show message
@@ -97,7 +97,7 @@ class SavedStatusTabState extends State<SavedStatusTab> {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (_savedStatusList.isNotEmpty) {
+    } else if (_savedStatusList!.isNotEmpty) {
       return Container(
         padding: EdgeInsets.only(bottom: 65.0),
         child: Column(
@@ -112,13 +112,13 @@ class SavedStatusTabState extends State<SavedStatusTab> {
             Expanded(
               child: GridView.builder(
                 shrinkWrap: true,
-                itemCount: _savedStatusList.length,
+                itemCount: _savedStatusList!.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
                 itemBuilder: (context, index) {
                   /// Get Status path
-                  final String statusPath = _savedStatusList[index];
+                  final String statusPath = _savedStatusList![index];
 
                   /// Check selected status
                   final bool isSelected =
@@ -133,7 +133,7 @@ class SavedStatusTabState extends State<SavedStatusTab> {
                       onTap: () => _viewStatus(statusPath),
                       // onSave: Ads.showInterstitialAd,
                       onDelete: () {
-                        _deleteStatus(_savedStatusList[index]);
+                        _deleteStatus(_savedStatusList![index]);
                       });
                 },
               ),
@@ -193,36 +193,39 @@ class SavedStatusTabState extends State<SavedStatusTab> {
                                 ),
                                 actions: [
                                   // Cancel button
-                                  FlatButton(
-                                      textColor: Colors.grey,
+                                  TextButton(
+                                      style: TextButton.styleFrom(foregroundColor: Colors.grey),
                                       child: Text(_i18n.translate('CANCEL')),
                                       onPressed: () =>
                                           Navigator.of(context).pop()),
                                   // Delete button
-                                  FlatButton(
-                                    textColor: Colors.red,
+                                  TextButton(
+                                    style: TextButton.styleFrom(foregroundColor: Colors.red),
                                     child: Text(_i18n.translate('DELETE')),
                                     onPressed: () async {
                                       /// Delete bulk status
                                       ///
-                                      // Loop selected status
-                                      for (String status
-                                          in AppModel().selectedStatusList) {
-                                        print('Selected status: $status');
-
-                                        //Remove status from the list
-                                        _savedStatusList.remove(status);
-
-                                        /// Delete status one by one
-                                        await File(status).delete();
+                                      // Delete each selected file; only drop
+                                      // it from the list once it is really
+                                      // gone, so a failure can't hide a file
+                                      // that is still on disk.
+                                      final selected = List<String>.from(
+                                          AppModel().selectedStatusList);
+                                      for (final status in selected) {
+                                        try {
+                                          final file = File(status);
+                                          if (await file.exists()) {
+                                            await file.delete();
+                                          }
+                                          _savedStatusList?.remove(status);
+                                        } catch (e) {
+                                          debugPrint(
+                                              'Could not delete $status: $e');
+                                        }
                                       }
-                                      // Empty list
                                       AppModel().clearSeletedStatuses();
-
-                                      /// Update UI
-                                      //setState(() {});
-
-                                      // Close dialog
+                                      if (!context.mounted) return;
+                                      setState(() {});
                                       Navigator.of(context).pop();
                                     },
                                   ),
@@ -254,23 +257,24 @@ class SavedStatusTabState extends State<SavedStatusTab> {
               ),
               actions: [
                 // Cancel button
-                FlatButton(
-                    textColor: Colors.grey,
+                TextButton(
+                    style: TextButton.styleFrom(foregroundColor: Colors.grey),
                     child: Text(_i18n.translate('CANCEL')),
                     onPressed: () => Navigator.of(context).pop()),
                 // Delete button
-                FlatButton(
-                  textColor: Colors.red,
+                TextButton(
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
                   child: Text(_i18n.translate('DELETE')),
                   onPressed: () async {
-                    /// Delete status one by one
-                    await File(path).delete();
-
-                    /// Update UI
-                    setState(() {
-                      _savedStatusList.remove(path);
-                    });
-                    // Close dialog
+                    try {
+                      final file = File(path);
+                      if (await file.exists()) await file.delete();
+                      _savedStatusList?.remove(path);
+                    } catch (e) {
+                      debugPrint('Could not delete $path: $e');
+                    }
+                    if (!context.mounted) return;
+                    setState(() {});
                     Navigator.of(context).pop();
                   },
                 ),

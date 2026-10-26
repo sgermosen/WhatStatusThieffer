@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:status_saver/app/ads.dart';
 import 'package:status_saver/app/app.dart';
 import 'package:status_saver/screens/view_status_screen.dart';
+import 'package:status_saver/widgets/folder_access_prompt.dart';
 import 'package:status_saver/widgets/status_card.dart';
 import 'package:status_saver/app/app_localizations.dart';
 
@@ -10,7 +10,7 @@ class PhotosTab extends StatefulWidget {
   // Variables
   final String app;
 
-  PhotosTab({@required this.app});
+  PhotosTab({required this.app});
 
   @override
   _PhotosTabState createState() {
@@ -21,8 +21,8 @@ class PhotosTab extends StatefulWidget {
 class _PhotosTabState extends State<PhotosTab> {
   // Variables
   final App _app = new App();
-  List _imageList;
-  AppLocalizations _i18n;
+  List<String>? _imageList;
+  late AppLocalizations _i18n;
 
   /// View Status and update UI on delete
   Future<void> _viewStatus(String statusPath) async {
@@ -37,7 +37,7 @@ class _PhotosTabState extends State<PhotosTab> {
     if (result != null) {
       // Update user interface
       setState(() {
-        _imageList.remove(result);
+        _imageList?.remove(result);
       });
 
       // Show message
@@ -49,30 +49,33 @@ class _PhotosTabState extends State<PhotosTab> {
     }
   }
 
+  bool _needsFolderAccess = false;
+  static const _extensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+
   @override
   void initState() {
     super.initState();
+    _load();
+  }
 
-    // Get all media directories for the selected platform and merge images.
-    _app.getMediaDirs(widget.app).then((dirs) {
-      final List<String> images = [];
-      for (final path in dirs) {
-        try {
-          images.addAll(Directory(path)
-              .listSync()
-              .map((item) => item.path)
-              .where((item) =>
-                  item.endsWith(".jpg") ||
-                  item.endsWith(".jpeg") ||
-                  item.endsWith(".png") ||
-                  item.endsWith(".gif")));
-        } catch (e) {
-          // Ignore directories we can't read.
-          // print('Could not read dir $path: $e');
-        }
-      }
-      if (mounted) setState(() => _imageList = images);
+  /// Load the platform's media and keep only this tab's file types.
+  Future<void> _load() async {
+    final result = await _app.loadMediaFiles(widget.app);
+    final files = result.files
+        .where((f) => _extensions.any((e) => f.toLowerCase().endsWith(e)))
+        .toList();
+    if (!mounted) return;
+    setState(() {
+      _needsFolderAccess = result.needsFolderAccess;
+      _imageList = files;
     });
+  }
+
+  Future<void> _grantFolderAccess() async {
+    if (await _app.requestFolderAccess(widget.app)) {
+      setState(() => _imageList = null);
+      _load();
+    }
   }
 
   @override
@@ -88,26 +91,29 @@ class _PhotosTabState extends State<PhotosTab> {
   }
 
   Widget _showPhotoStatuses() {
+    if (_needsFolderAccess) {
+      return FolderAccessPrompt(onGrant: _grantFolderAccess);
+    }
     /// Check list
     if (_imageList == null) {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (_imageList.isNotEmpty) {
+    } else if (_imageList!.isNotEmpty) {
       /// Show image statuses
       return GridView.builder(
-          itemCount: _imageList.length,
+          itemCount: _imageList!.length,
           padding: EdgeInsets.only(bottom: 65.0),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
           itemBuilder: (context, index) {
             return StatusCard(
-              statusPath: _imageList[index],
+              statusPath: _imageList![index],
               onTap: () {
-                _viewStatus(_imageList[index]);
+                _viewStatus(_imageList![index]);
               },
-              // onSave: Ads.showInterstitialAd,
+              onSave: Ads.showInterstitial,
             );
           });
     } else {

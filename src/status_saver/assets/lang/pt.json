@@ -53,6 +53,10 @@
     "_remove_ads_screen": "*** Remove Ads - Subscriptions Translations ***",
     "remove_ads_subscriptions": "Remover Anúncios - Assinaturas",
     "get_a_better_experience_with_our_app_without_Ads_showing": "Obtenha uma experiência melhor com nosso aplicativo sem Anúncios",
+  "you_already_removed_ads": "Você já removeu os anúncios. Obrigado pelo seu apoio!",
+  "grant_status_folder_title": "Permita o acesso aos status do WhatsApp",
+  "grant_status_folder_message": "Desde o Android 11, o WhatsApp guarda os status em uma pasta protegida. Toque no botão e, na próxima tela, pressione \"Usar esta pasta\" e depois \"Permitir\". Você só precisa fazer isso uma vez.\n\nDica: primeiro veja os status no WhatsApp para que sejam baixados.",
+  "grant_access": "Permitir acesso",
   
     "_remove_watermark_screen": "*** Remove Watermark - Subscriptions Translations ***",
     "remove_watermark_subscriptions": "Remover a Marca d'Água - Assinaturas",

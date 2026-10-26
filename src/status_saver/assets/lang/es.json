@@ -51,6 +51,10 @@
   "_remove_ads_screen": "*** Traduccion de la pantalla Remover Ads mediante Subscripcion ***",
   "remove_ads_subscriptions": "Elimina los Ads - Subscripción",
   "get_a_better_experience_with_our_app_without_Ads_showing": "Obten una mejor experiencia en nuestra app sin ver anuncios molestos",
+  "you_already_removed_ads": "Ya eliminaste los anuncios. ¡Gracias por tu apoyo!",
+  "grant_status_folder_title": "Permite el acceso a los estados de WhatsApp",
+  "grant_status_folder_message": "Desde Android 11, WhatsApp guarda los estados en una carpeta protegida. Toca el botón y en la siguiente pantalla pulsa \"Usar esta carpeta\" y luego \"Permitir\". Solo tienes que hacerlo una vez.\n\nConsejo: primero mira los estados en WhatsApp para que se descarguen.",
+  "grant_access": "Permitir acceso",
 
   "_remove_watermark_screen": "*** Traduccion de Subscripcion para Remover la Marca de Agua  ***",
   "remove_watermark_subscriptions": "Remover Marca de Agua - Subscripción",

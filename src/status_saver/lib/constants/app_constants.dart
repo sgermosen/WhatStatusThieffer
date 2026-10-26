@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:status_saver/models/media_platform.dart';
@@ -31,6 +29,7 @@ const List<MediaPlatform> SUPPORTED_PLATFORMS = [
       "WhatsApp/Media/.Statuses",
       "Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
     ],
+    safPath: "Android/media/com.whatsapp/WhatsApp/Media/.Statuses",
   ),
   MediaPlatform(
     key: "whatsapp_business",
@@ -41,6 +40,7 @@ const List<MediaPlatform> SUPPORTED_PLATFORMS = [
       "WhatsApp Business/Media/.Statuses",
       "Android/media/com.whatsapp.w4b/WhatsApp Business/Media/.Statuses",
     ],
+    safPath: "Android/media/com.whatsapp.w4b/WhatsApp Business/Media/.Statuses",
   ),
   MediaPlatform(
     key: "instagram",
@@ -105,17 +105,6 @@ const List<String> REMOVE_ADS_SUB_IDS = [
   'ads_3_months',
   'ads_6_months',
   'ads_1_year',
-];
-
-/// REMOVE WATERMARK - GOOGLE PLAY SUBSCRIPTIONS IDS
-///
-const List<String> REMOVE_WATERMARK_SUB_IDS = [
-  // Production IDs
-  'watermark_1_week',
-  'watermark_1_month',
-  'watermark_3_months',
-  'watermark_6_months',
-  'watermark_1_year',
 ];
 
 /// ADMOB SETTINGS

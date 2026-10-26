@@ -63,9 +63,10 @@ class _AboutScreenState extends State<AboutScreen> {
 
               /// Share app button
               SizedBox(height: 10),
-              FlatButton.icon(
-                color: Colors.teal,
-                textColor: Colors.white,
+              FilledButton.icon(
+                style: FilledButton.styleFrom(
+                    backgroundColor: Colors.teal,
+                    foregroundColor: Colors.white),
                 icon: Icon(Icons.share),
                 label: Text(i18n.translate('share_app'),
                     style: TextStyle(
